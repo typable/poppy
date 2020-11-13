@@ -1,0 +1,7 @@
+main: de.typable.minecrafthub.Main
+name: MinecraftHub
+version: 0.0.1
+author: typable
+api-version: 1.16
+commands:
+  
