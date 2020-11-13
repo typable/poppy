@@ -1,4 +1,5 @@
 /bin/
-lib/*
+/lib/
+*.jar
 .classpath
 .project
