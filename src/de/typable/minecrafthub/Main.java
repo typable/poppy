@@ -72,7 +72,7 @@ public class Main extends JavaPlugin
 					return false;
 				}
 
-				boolean enabled = Boolean.getBoolean(argument);
+				boolean enabled = argument.equals("true");
 				standbyListener.setEnabled(enabled);
 
 				player.sendMessage(ChatColor.GRAY + "Standby mode is now "
