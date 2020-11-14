@@ -1,0 +1,7 @@
+Legend:
+[ ] = Open  [?] = Test  [X] = Done  [-] = Ignore  [!] = Stuck  [/] = Partial  [i] = Clarify
+
+Syntax: [<state>] <message>
+Example: [?] Test latest changes
+
+----------------------------------------------------------------------------------------------------
