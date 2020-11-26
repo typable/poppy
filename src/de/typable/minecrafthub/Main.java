@@ -12,6 +12,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.typable.minecrafthub.constant.DefaultConstants;
+import de.typable.minecrafthub.event.DoubleDoorListener;
+import de.typable.minecrafthub.event.EventListener;
 import de.typable.minecrafthub.event.StandbyListener;
 
 
@@ -19,6 +21,8 @@ public class Main extends JavaPlugin
 {
 	private PluginManager pluginManager;
 	private StandbyListener standbyListener;
+	private DoubleDoorListener doubleDoorListener;
+	private EventListener eventListener;
 
 	@Override
 	public void onEnable()
@@ -27,6 +31,12 @@ public class Main extends JavaPlugin
 
 		standbyListener = new StandbyListener(this);
 		pluginManager.registerEvents(standbyListener, this);
+		
+		doubleDoorListener = new DoubleDoorListener();
+		pluginManager.registerEvents(doubleDoorListener, this);
+		
+		eventListener = new EventListener();
+		pluginManager.registerEvents(eventListener, this);
 	}
 
 	@Override
