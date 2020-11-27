@@ -72,6 +72,12 @@ public class Main extends JavaPlugin
 			
 			if(label.equals("skull"))
 			{
+				if(!player.isOp())
+				{
+					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
+					return true;
+				}
+				
 				if(args.length != 1)
 				{
 					return false;

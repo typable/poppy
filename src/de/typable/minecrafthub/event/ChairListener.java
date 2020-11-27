@@ -56,6 +56,8 @@ public class ChairListener implements Listener
 							arrow.setInvulnerable(true);
 							arrow.setPickupStatus(PickupStatus.DISALLOWED);
 							arrow.setPassenger((Entity) event.getPlayer());
+							
+							event.setCancelled(true);
 						}
 					}
 				}
