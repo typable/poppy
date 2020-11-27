@@ -5,5 +5,7 @@ author: typable
 api-version: 1.16
 commands:
   head:
+  skull:
+    usage: /skull <player>
   standby:
     usage: /standby <true, false>
