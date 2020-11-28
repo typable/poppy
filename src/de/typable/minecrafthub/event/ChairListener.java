@@ -3,6 +3,7 @@ package de.typable.minecrafthub.event;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.entity.Arrow;
@@ -36,7 +37,7 @@ public class ChairListener implements Listener
 	{
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
-			if(event.getClickedBlock() != null)
+			if(event.getClickedBlock() != null && !event.getPlayer().isSneaking())
 			{
 				Block block = event.getClickedBlock();
 				
@@ -94,12 +95,17 @@ public class ChairListener implements Listener
 	
 	private boolean isCompatible(Stairs stairs)
 	{
+		if(stairs.getHalf() != Half.BOTTOM)
+		{
+			return false;
+		}
+		
 		if(stairs.isWaterlogged())
 		{
 			return false;
 		}
 		
-		if(stairs.getShape() != Stairs.Shape.STRAIGHT)
+		if(stairs.getShape() == Stairs.Shape.INNER_RIGHT || stairs.getShape() == Stairs.Shape.INNER_LEFT)
 		{
 			return false;
 		}
