@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -30,6 +32,8 @@ public class DoubleDoorListener implements Listener
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
+		Player player = event.getPlayer();
+		
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
 			if(event.getClickedBlock() != null)
@@ -39,6 +43,11 @@ public class DoubleDoorListener implements Listener
 				if(isDoor(block.getType()))
 				{
 					List<Block> blockList = getNearbyDoors(block.getLocation());
+					
+					if(player.isSneaking())
+					{
+						return;
+					}
 					
 					if(blockList.isEmpty())
 					{
@@ -66,6 +75,8 @@ public class DoubleDoorListener implements Listener
 								
 								stateItem.setBlockData(doorItem);
 								stateItem.update();
+								
+								player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_DOOR_CLOSE, 1F, 1F);
 							}
 							
 							if(!door.isOpen() && !doorItem.isOpen())
@@ -74,6 +85,8 @@ public class DoubleDoorListener implements Listener
 								
 								stateItem.setBlockData(doorItem);
 								stateItem.update();
+								
+								player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_DOOR_OPEN, 1F, 1F);
 							}
 						}
 					}
