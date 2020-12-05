@@ -34,13 +34,13 @@ public class Main extends JavaPlugin
 
 		standbyListener = new StandbyListener(this);
 		pluginManager.registerEvents(standbyListener, this);
-		
+
 		doubleDoorListener = new DoubleDoorListener();
 		pluginManager.registerEvents(doubleDoorListener, this);
-		
+
 		chairListener = new ChairListener();
 		pluginManager.registerEvents(chairListener, this);
-		
+
 		eventListener = new EventListener();
 		pluginManager.registerEvents(eventListener, this);
 	}
@@ -57,7 +57,7 @@ public class Main extends JavaPlugin
 			{
 				ItemStack handitem = player.getInventory().getItemInMainHand();
 				ItemStack headitem = player.getInventory().getHelmet();
-				
+
 				player.getInventory().setHelmet(handitem);
 				player.getInventory().setItemInMainHand((new ItemStack(Material.AIR)));
 
@@ -69,7 +69,7 @@ public class Main extends JavaPlugin
 					}
 				}
 			}
-			
+
 			if(label.equals("skull"))
 			{
 				if(!player.isOp())
@@ -77,17 +77,17 @@ public class Main extends JavaPlugin
 					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
 					return true;
 				}
-				
+
 				if(args.length != 1)
 				{
 					return false;
 				}
-				
+
 				ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
 				SkullMeta meta = (SkullMeta) skull.getItemMeta();
 				meta.setOwner(args[0]);
 				skull.setItemMeta(meta);
-				
+
 				player.getInventory().addItem(skull);
 			}
 
@@ -114,8 +114,7 @@ public class Main extends JavaPlugin
 				boolean enabled = argument.equals("true");
 				standbyListener.setEnabled(enabled);
 
-				player.sendMessage(ChatColor.GRAY + "Standby mode is now "
-				      + (enabled ? "enabled" : "disabled"));
+				player.sendMessage(ChatColor.GRAY + "Standby mode is now " + (enabled ? "enabled" : "disabled"));
 			}
 		}
 

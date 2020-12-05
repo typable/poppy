@@ -15,7 +15,7 @@ import de.typable.minecrafthub.constant.DefaultConstants;
 
 
 public class StandbyListener implements Listener, Runnable
-{	
+{
 	private Plugin plugin;
 	private BukkitTask task;
 	private boolean enabled;
@@ -43,7 +43,7 @@ public class StandbyListener implements Listener, Runnable
 		if(enabled)
 		{
 			Collection<? extends Player> online = Bukkit.getOnlinePlayers();
-			
+
 			if(online.size() == 1 && online.contains(event.getPlayer()))
 			{
 				task = Bukkit.getScheduler().runTaskLater(plugin, this, delay * DefaultConstants.TICK);

@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+
 public class EventListener implements Listener
 {
 	@EventHandler
@@ -16,23 +17,25 @@ public class EventListener implements Listener
 	{
 		if(event.getAction() == Action.PHYSICAL)
 		{
-			if(event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.FARMLAND)
+			if(event.getClickedBlock() != null && event.getClickedBlock()
+			      .getType() == Material.FARMLAND)
 			{
 				event.setCancelled(true);
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent event)
 	{
 		event.blockList().clear();
 	}
-	
+
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event)
 	{
-		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY + event.getMessage();
+		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY + event
+		      .getMessage();
 		event.setFormat(format);
 	}
 }
