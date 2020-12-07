@@ -32,6 +32,8 @@ public class ChairListener implements Listener
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
+		Player player = event.getPlayer();
+		
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
 			if(event.getClickedBlock() != null && !event.getPlayer().isSneaking())
@@ -40,6 +42,11 @@ public class ChairListener implements Listener
 
 				if(isChair(block.getType()))
 				{
+					if(block.getLocation().add(0.5, 0.5, 0.5).distance(player.getLocation()) > 2)
+					{
+						return;
+					}
+					
 					if(blockMap.containsKey(block))
 					{
 						return;

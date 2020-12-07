@@ -13,6 +13,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.typable.minecrafthub.constant.DefaultConstants;
+import de.typable.minecrafthub.event.AutoWorkbenchListener;
 import de.typable.minecrafthub.event.ChairListener;
 import de.typable.minecrafthub.event.DoubleDoorListener;
 import de.typable.minecrafthub.event.EventListener;
@@ -25,6 +26,7 @@ public class Main extends JavaPlugin
 	private StandbyListener standbyListener;
 	private DoubleDoorListener doubleDoorListener;
 	private ChairListener chairListener;
+	private AutoWorkbenchListener autoWorkbenchListener;
 	private EventListener eventListener;
 
 	@Override
@@ -40,6 +42,9 @@ public class Main extends JavaPlugin
 
 		chairListener = new ChairListener();
 		pluginManager.registerEvents(chairListener, this);
+		
+		autoWorkbenchListener = new AutoWorkbenchListener();
+		pluginManager.registerEvents(autoWorkbenchListener, this);
 
 		eventListener = new EventListener();
 		pluginManager.registerEvents(eventListener, this);

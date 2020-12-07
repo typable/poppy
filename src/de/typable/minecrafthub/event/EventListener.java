@@ -17,10 +17,12 @@ public class EventListener implements Listener
 	{
 		if(event.getAction() == Action.PHYSICAL)
 		{
-			if(event.getClickedBlock() != null && event.getClickedBlock()
-			      .getType() == Material.FARMLAND)
+			if(event.getClickedBlock() != null)
 			{
-				event.setCancelled(true);
+				if(event.getClickedBlock().getType() == Material.FARMLAND)
+				{
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -34,6 +36,8 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event)
 	{
+		// FIXME Conversion Exception on '%
+
 		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY + event
 		      .getMessage();
 		event.setFormat(format);

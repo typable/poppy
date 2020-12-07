@@ -11,7 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
+
+import de.typable.minecrafthub.util.Util;
 
 
 public class DoubleDoorListener implements Listener
@@ -33,12 +34,12 @@ public class DoubleDoorListener implements Listener
 				{
 					if(player.isSneaking())
 					{
-						if(isHoldingItem(player.getInventory().getItemInMainHand()))
+						if(!Util.isEmpty(player.getInventory().getItemInMainHand()))
 						{
 							return;
 						}
 
-						if(isHoldingItem(player.getInventory().getItemInOffHand()))
+						if(!Util.isEmpty(player.getInventory().getItemInOffHand()))
 						{
 							return;
 						}
@@ -89,21 +90,6 @@ public class DoubleDoorListener implements Listener
 				}
 			}
 		}
-	}
-
-	private boolean isHoldingItem(ItemStack item)
-	{
-		if(item == null)
-		{
-			return false;
-		}
-
-		if(item.getType() == Material.AIR)
-		{
-			return false;
-		}
-
-		return true;
 	}
 
 	private boolean isDoor(Material material)
