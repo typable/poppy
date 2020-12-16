@@ -2,6 +2,7 @@ package de.typable.minecrafthub.event;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -30,7 +31,10 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent event)
 	{
-		event.blockList().clear();
+		if(event.getEntityType() == EntityType.CREEPER)
+		{
+			event.blockList().clear();
+		}
 	}
 
 	@EventHandler
@@ -38,8 +42,8 @@ public class EventListener implements Listener
 	{
 		// FIXME Conversion Exception on '%
 
-		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY + event
-		      .getMessage();
+		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY
+		      + event.getMessage();
 		event.setFormat(format);
 	}
 }
