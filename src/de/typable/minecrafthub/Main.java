@@ -1,5 +1,10 @@
 package de.typable.minecrafthub;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -9,15 +14,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.typable.minecrafthub.constant.DefaultConstants;
 import de.typable.minecrafthub.event.AutoWorkbenchListener;
 import de.typable.minecrafthub.event.ChairListener;
+import de.typable.minecrafthub.event.ChestLockListener;
 import de.typable.minecrafthub.event.DoubleDoorListener;
 import de.typable.minecrafthub.event.EventListener;
 import de.typable.minecrafthub.event.StandbyListener;
+import de.typable.minecrafthub.util.Util;
 
 
 public class Main extends JavaPlugin
@@ -27,11 +35,16 @@ public class Main extends JavaPlugin
 	private DoubleDoorListener doubleDoorListener;
 	private ChairListener chairListener;
 	private AutoWorkbenchListener autoWorkbenchListener;
+	private ChestLockListener chestLockListener;
 	private EventListener eventListener;
 
+	private Plugin plugin;
+	
 	@Override
 	public void onEnable()
 	{
+		plugin = this;
+		
 		pluginManager = Bukkit.getPluginManager();
 
 		standbyListener = new StandbyListener(this);
@@ -45,9 +58,47 @@ public class Main extends JavaPlugin
 		
 		autoWorkbenchListener = new AutoWorkbenchListener();
 		pluginManager.registerEvents(autoWorkbenchListener, this);
+		
+		chestLockListener = new ChestLockListener();
+		pluginManager.registerEvents(chestLockListener, this);
 
 		eventListener = new EventListener();
 		pluginManager.registerEvents(eventListener, this);
+		
+		Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try(ServerSocket serverSocket = new ServerSocket(25560))
+				{
+					while(!serverSocket.isClosed())
+					{
+						Socket socket = serverSocket.accept();
+						
+						Util.sendCountdown(plugin, "Server restarts in", 5, new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								for(Player target : Bukkit.getOnlinePlayers())
+								{
+									target.kickPlayer("Server restarting...");
+								}
+								
+								Bukkit.getServer().shutdown();
+							}
+						});
+						
+						socket.close();
+					}
+				}
+				catch(IOException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		});
 	}
 
 	@SuppressWarnings("deprecation")
@@ -58,6 +109,42 @@ public class Main extends JavaPlugin
 		{
 			Player player = (Player) sender;
 
+			if(label.equals("shutdown")) {
+				
+				if(!player.isOp())
+				{
+					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
+					return true;
+				}
+				
+				String path = new File(".").getAbsolutePath();
+				
+				File file = new File(path + "/.shutdown");
+				
+				try
+				{
+					file.createNewFile();
+					
+					Util.sendCountdown(this, "Server shuts down in", 5, new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							for(Player target : Bukkit.getOnlinePlayers())
+							{
+								target.kickPlayer("Server stopped");
+							}
+							
+							Bukkit.getServer().shutdown();
+						}
+					});
+				}
+				catch(IOException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+			
 			if(label.equals("head"))
 			{
 				ItemStack handitem = player.getInventory().getItemInMainHand();

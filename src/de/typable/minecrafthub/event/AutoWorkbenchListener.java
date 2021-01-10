@@ -80,7 +80,7 @@ public class AutoWorkbenchListener implements Listener
 		{
 			Recipe recipe = iterator.next();
 
-			if(item.isSimilar(recipe.getResult()))
+			if(Util.compare(item, recipe.getResult()))
 			{
 				List<ItemStack> ingredients = null;
 
@@ -159,7 +159,7 @@ public class AutoWorkbenchListener implements Listener
 					continue;
 				}
 				
-				if(ingredient.isSimilar(item))
+				if(Util.compare(item, ingredient))
 				{
 					if(item.getAmount() > amount)
 					{
@@ -191,7 +191,7 @@ public class AutoWorkbenchListener implements Listener
 	{
 		for(ItemStack ingredient : ingredients)
 		{
-			if(ingredient.isSimilar(item))
+			if(Util.compare(item, ingredient))
 			{
 				ingredient.setAmount(ingredient.getAmount() + item.getAmount());
 				
@@ -209,7 +209,7 @@ public class AutoWorkbenchListener implements Listener
 	{
 		for(ItemStack ingredient : ingredients)
 		{
-			if(ingredient != null && !inventory.containsAtLeast(ingredient, ingredient.getAmount()))
+			if(ingredient != null && !Util.containsAtLeast(inventory, ingredient, ingredient.getAmount()))
 			{
 				return false;
 			}
