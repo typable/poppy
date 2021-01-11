@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -49,48 +50,45 @@ public class EventListener implements Listener
 	{
 		// FIXME Conversion Exception on '%
 
-		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY
-		      + event.getMessage();
+		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY + event.getMessage();
 		event.setFormat(format);
 	}
-	
+
 	@EventHandler
 	public void onEntityHit(EntityDamageByEntityEvent event)
 	{
-		 if(event.getDamager() instanceof Snowball) 
-		 {
-			 Snowball snowball = (Snowball) event.getDamager();
-		 
-		   if(snowball.getShooter() instanceof Player) 
-		   {
-		      Player player = (Player) event.getEntity();
-		      
-		      player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 1));
-		      
-		      event.setDamage(1);
-		   }
-		 }
+		if(event.getDamager() instanceof Snowball)
+		{
+			Snowball snowball = (Snowball) event.getDamager();
+
+			if(snowball.getShooter() instanceof Player)
+			{
+				Player player = (Player) event.getEntity();
+
+				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 1));
+				event.setDamage(1);
+			}
+		}
 	}
-	
+
 	@EventHandler
-   public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) 
+	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event)
 	{
+		Player player = event.getPlayer();
 
-       Player player = event.getPlayer();
-       
-       if (event.getRightClicked().getType().equals(EntityType.ARMOR_STAND))
-       {
-      	 
-      	 if(player.getInventory().getItemInMainHand().getType() == Material.STICK && player.getInventory().getItemInMainHand().getAmount() > 1 && player.isSneaking())
-      	 {
-      		 ArmorStand armorstand = (ArmorStand) event.getRightClicked();
-         		
-         		armorstand.setArms(true);
-         		event.setCancelled(true);
-         		
-         		player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 2);
-      	 }
-        }
-    }
+		if(event.getRightClicked().getType().equals(EntityType.ARMOR_STAND))
+		{
+			ItemStack item = player.getInventory().getItemInMainHand();
+			
+			if(item.getType() == Material.STICK && item.getAmount() > 1 && player.isSneaking())
+			{
+				ArmorStand armorstand = (ArmorStand) event.getRightClicked();
+
+				armorstand.setArms(true);
+				event.setCancelled(true);
+
+				item.setAmount(item.getAmount() - 2);
+			}
+		}
+	}
 }
-
