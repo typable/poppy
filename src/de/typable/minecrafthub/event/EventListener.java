@@ -2,13 +2,20 @@ package de.typable.minecrafthub.event;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class EventListener implements Listener
@@ -46,4 +53,44 @@ public class EventListener implements Listener
 		      + event.getMessage();
 		event.setFormat(format);
 	}
+	
+	@EventHandler
+	public void onEntityHit(EntityDamageByEntityEvent event)
+	{
+		 if(event.getDamager() instanceof Snowball) 
+		 {
+			 Snowball snowball = (Snowball) event.getDamager();
+		 
+		   if(snowball.getShooter() instanceof Player) 
+		   {
+		      Player player = (Player) event.getEntity();
+		      
+		      player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 1));
+		      
+		      event.setDamage(1);
+		   }
+		 }
+	}
+	
+	@EventHandler
+   public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) 
+	{
+
+       Player player = event.getPlayer();
+       
+       if (event.getRightClicked().getType().equals(EntityType.ARMOR_STAND))
+       {
+      	 
+      	 if(player.getInventory().getItemInMainHand().getType() == Material.STICK && player.getInventory().getItemInMainHand().getAmount() > 1 && player.isSneaking())
+      	 {
+      		 ArmorStand armorstand = (ArmorStand) event.getRightClicked();
+         		
+         		armorstand.setArms(true);
+         		event.setCancelled(true);
+         		
+         		player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 2);
+      	 }
+        }
+    }
 }
+

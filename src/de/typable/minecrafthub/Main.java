@@ -21,7 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.typable.minecrafthub.constant.DefaultConstants;
 import de.typable.minecrafthub.event.AutoWorkbenchListener;
 import de.typable.minecrafthub.event.ChairListener;
-import de.typable.minecrafthub.event.ChestLockListener;
 import de.typable.minecrafthub.event.DoubleDoorListener;
 import de.typable.minecrafthub.event.EventListener;
 import de.typable.minecrafthub.event.StandbyListener;
@@ -35,7 +34,6 @@ public class Main extends JavaPlugin
 	private DoubleDoorListener doubleDoorListener;
 	private ChairListener chairListener;
 	private AutoWorkbenchListener autoWorkbenchListener;
-	private ChestLockListener chestLockListener;
 	private EventListener eventListener;
 
 	private Plugin plugin;
@@ -58,9 +56,6 @@ public class Main extends JavaPlugin
 		
 		autoWorkbenchListener = new AutoWorkbenchListener();
 		pluginManager.registerEvents(autoWorkbenchListener, this);
-		
-		chestLockListener = new ChestLockListener();
-		pluginManager.registerEvents(chestLockListener, this);
 
 		eventListener = new EventListener();
 		pluginManager.registerEvents(eventListener, this);
