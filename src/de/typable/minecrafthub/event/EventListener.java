@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -86,9 +87,23 @@ public class EventListener implements Listener
 
 				armorstand.setArms(true);
 				event.setCancelled(true);
-
+				
 				item.setAmount(item.getAmount() - 2);
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onArmorStandDestroy(EntityDeathEvent event)
+	{
+	  if(event.getEntity() instanceof ArmorStand)
+	  {
+		  ArmorStand armorstand = (ArmorStand) event.getEntity();
+	
+		  if(armorstand.hasArms())
+		  {
+			  event.getDrops().add(new ItemStack(Material.STICK, 2));
+		  }
+	  }
 	}
 }
