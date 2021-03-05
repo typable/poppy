@@ -96,14 +96,13 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onArmorStandDestroy(EntityDeathEvent event)
 	{
-	  if(event.getEntity() instanceof ArmorStand)
-	  {
-		  ArmorStand armorstand = (ArmorStand) event.getEntity();
-	
-		  if(armorstand.hasArms())
-		  {
-			  event.getDrops().add(new ItemStack(Material.STICK, 2));
-		  }
-	  }
+		if(event.getEntity() instanceof ArmorStand)
+		{
+			ArmorStand armorstand = (ArmorStand) event.getEntity();
+
+			if(armorstand.hasArms()){
+				event.getDrops().add(new ItemStack(Material.STICK, 2));
+			}
+		}
 	}
 }
