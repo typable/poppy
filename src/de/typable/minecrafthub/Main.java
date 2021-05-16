@@ -2,6 +2,7 @@ package de.typable.minecrafthub;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -17,6 +18,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import de.typable.minecrafthub.constant.DefaultConstants;
 import de.typable.minecrafthub.event.AutoWorkbenchListener;
@@ -37,6 +39,7 @@ public class Main extends JavaPlugin
 	private EventListener eventListener;
 
 	private Plugin plugin;
+	private BukkitTask task;
 	
 	@Override
 	public void onEnable()
@@ -60,7 +63,7 @@ public class Main extends JavaPlugin
 		eventListener = new EventListener();
 		pluginManager.registerEvents(eventListener, this);
 		
-		Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable()
+		task = Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable()
 		{
 			@Override
 			public void run()
@@ -88,12 +91,27 @@ public class Main extends JavaPlugin
 						socket.close();
 					}
 				}
+				catch(BindException ex)
+				{
+					// ignore
+				}
 				catch(IOException ex)
 				{
 					ex.printStackTrace();
 				}
 			}
 		});
+	}
+
+	@Override
+	public void onDisable()
+	{
+		if(task != null && task.isCancelled())
+		{
+			task.cancel();
+		}
+
+		chairListener.onDisable();
 	}
 
 	@SuppressWarnings("deprecation")

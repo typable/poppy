@@ -7,26 +7,37 @@ import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Stairs;
-import org.bukkit.entity.AbstractArrow.PickupStatus;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 
 public class ChairListener implements Listener
 {
-	private static final Material[] CHAIR_TYPE = new Material[] { Material.OAK_STAIRS, Material.SPRUCE_STAIRS, Material.BIRCH_STAIRS, Material.JUNGLE_STAIRS, Material.ACACIA_STAIRS, Material.DARK_OAK_STAIRS, Material.ACACIA_STAIRS, Material.CRIMSON_STAIRS, Material.WARPED_STAIRS };
+	private static final Material[] CHAIR_TYPE = new Material[]
+	{
+		Material.OAK_STAIRS,
+		Material.SPRUCE_STAIRS,
+		Material.BIRCH_STAIRS,
+		Material.JUNGLE_STAIRS,
+		Material.ACACIA_STAIRS,
+		Material.DARK_OAK_STAIRS,
+		Material.ACACIA_STAIRS,
+		Material.CRIMSON_STAIRS,
+		Material.WARPED_STAIRS
+	};
 
-	private Map<Block, Arrow> blockMap = new HashMap<>();
+	private Map<Block, ArmorStand> blockMap = new HashMap<>();
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
@@ -60,18 +71,26 @@ public class ChairListener implements Listener
 
 						if(isCompatible(stairs))
 						{
-							Location location = block.getLocation().add(0.5, 0, 0.5);
-							Arrow arrow = (Arrow) block.getWorld()
-							      .spawnArrow(location, new Vector(), 0F, 0F);
-							arrow.setGravity(false);
-							arrow.setInvulnerable(true);
-							arrow.setPickupStatus(PickupStatus.DISALLOWED);
-							arrow.setPassenger((Entity) event.getPlayer());
-							arrow.setTicksLived(0);
+							Float yaw = convertFacingToYaw(stairs.getFacing());
+
+							if(yaw == null)
+							{
+								return;
+							}
+
+							Location location = block.getLocation().add(0.5, -0.4, 0.5);
+							location.setYaw(yaw);
+
+							ArmorStand armorStand = (ArmorStand) block.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+							armorStand.setPassenger((Entity) event.getPlayer());
+							armorStand.setSmall(true);
+							armorStand.setGravity(false);
+							armorStand.setInvulnerable(true);
+							armorStand.setVisible(false);
 
 							event.setCancelled(true);
 
-							blockMap.put(block, arrow);
+							blockMap.put(block, armorStand);
 						}
 					}
 				}
@@ -86,11 +105,11 @@ public class ChairListener implements Listener
 		{
 			Entity entity = event.getDismounted();
 
-			if(entity != null && entity instanceof Arrow)
+			if(entity != null && entity instanceof ArmorStand)
 			{
 				if(blockMap.containsValue(entity))
 				{
-					for(Entry<Block, Arrow> entry : blockMap.entrySet())
+					for(Entry<Block, ArmorStand> entry : blockMap.entrySet())
 					{
 						if(entry.getValue() == entity)
 						{
@@ -113,8 +132,8 @@ public class ChairListener implements Listener
 
 		if(blockMap.containsKey(block))
 		{
-			Arrow arrow = blockMap.get(block);
-			arrow.eject();
+			ArmorStand armorStand = blockMap.get(block);
+			armorStand.eject();
 
 			blockMap.remove(block);
 		}
@@ -145,12 +164,39 @@ public class ChairListener implements Listener
 			return false;
 		}
 
-		if(stairs.getShape() == Stairs.Shape.INNER_RIGHT || stairs
-		      .getShape() == Stairs.Shape.INNER_LEFT)
+		if(stairs.getShape() == Stairs.Shape.INNER_RIGHT || stairs.getShape() == Stairs.Shape.INNER_LEFT)
 		{
 			return false;
 		}
 
 		return true;
+	}
+
+	private Float convertFacingToYaw(BlockFace face)
+	{
+		switch(face)
+		{
+			case NORTH:
+				return 0F;
+			case EAST:
+				return 90F;
+			case SOUTH:
+				return 180F;
+			case WEST:
+				return -90F;
+			default:
+				break;
+		}
+
+		return null;
+	}
+
+	public void onDisable()
+	{
+		for(ArmorStand armorStand : blockMap.values())
+		{
+			armorStand.eject();
+			armorStand.remove();
+		}
 	}
 }
