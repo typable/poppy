@@ -6,3 +6,4 @@
 *.prefs
 /build/**
 /.gradle/**
+/.env/**

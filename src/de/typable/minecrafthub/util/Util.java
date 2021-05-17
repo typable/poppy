@@ -2,6 +2,7 @@ package de.typable.minecrafthub.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -106,5 +107,29 @@ public class Util
 				count--;
 			}
 		}, 0L, DefaultConstants.TICK);
+	}
+
+	public static Float convertFacingToYaw(BlockFace face)
+	{
+		switch(face)
+		{
+			case NORTH:
+				return 0F;
+			case EAST:
+				return 90F;
+			case SOUTH:
+				return 180F;
+			case WEST:
+				return -90F;
+			default:
+				break;
+		}
+
+		return null;
+	}
+
+	public static boolean isAir(Material material)
+	{
+		return material == Material.AIR || material == Material.CAVE_AIR || material == Material.VOID_AIR;
 	}
 }

@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.ArmorStand;
@@ -20,6 +19,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.spigotmc.event.entity.EntityDismountEvent;
+
+import de.typable.minecrafthub.util.Util;
 
 
 public class ChairListener implements Listener
@@ -39,7 +40,15 @@ public class ChairListener implements Listener
 
 	private Map<Block, ArmorStand> blockMap = new HashMap<>();
 
-	@SuppressWarnings("deprecation")
+	public void onDisable()
+	{
+		for(ArmorStand armorStand : blockMap.values())
+		{
+			armorStand.eject();
+			armorStand.remove();
+		}
+	}
+
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
@@ -53,7 +62,7 @@ public class ChairListener implements Listener
 
 				if(isChair(block.getType()))
 				{
-					if(block.getLocation().add(0.5, 0.5, 0.5).distance(player.getLocation()) > 2)
+					if(!isInRange(block, player))
 					{
 						return;
 					}
@@ -63,35 +72,18 @@ public class ChairListener implements Listener
 						return;
 					}
 
-					Block upperBlock = block.getWorld().getBlockAt(block.getLocation().add(0, 1, 0));
-
-					if(upperBlock != null && upperBlock.getType() == Material.AIR)
+					if(isCompatible(block))
 					{
-						Stairs stairs = (Stairs) block.getState().getBlockData();
+						ArmorStand armorStand = createMountableChair(block, player);
 
-						if(isCompatible(stairs))
+						if(armorStand == null)
 						{
-							Float yaw = convertFacingToYaw(stairs.getFacing());
-
-							if(yaw == null)
-							{
-								return;
-							}
-
-							Location location = block.getLocation().add(0.5, -0.4, 0.5);
-							location.setYaw(yaw);
-
-							ArmorStand armorStand = (ArmorStand) block.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
-							armorStand.setPassenger((Entity) event.getPlayer());
-							armorStand.setSmall(true);
-							armorStand.setGravity(false);
-							armorStand.setInvulnerable(true);
-							armorStand.setVisible(false);
-
-							event.setCancelled(true);
-
-							blockMap.put(block, armorStand);
+							return;
 						}
+
+						event.setCancelled(true);
+
+						blockMap.put(block, armorStand);
 					}
 				}
 			}
@@ -139,6 +131,11 @@ public class ChairListener implements Listener
 		}
 	}
 
+	private boolean isInRange(Block block, Player player)
+	{
+		return block.getLocation().add(0.5, 0.5, 0.5).distance(player.getLocation()) <= 2;
+	}
+
 	private boolean isChair(Material material)
 	{
 		for(Material chair : CHAIR_TYPE)
@@ -152,8 +149,17 @@ public class ChairListener implements Listener
 		return false;
 	}
 
-	private boolean isCompatible(Stairs stairs)
+	private boolean isCompatible(Block block)
 	{
+		Block upperBlock = block.getWorld().getBlockAt(block.getLocation().add(0, 1, 0));
+
+		if(!Util.isAir(upperBlock.getType()))
+		{
+			return false;
+		}
+
+		Stairs stairs = (Stairs) block.getState().getBlockData();
+
 		if(stairs.getHalf() != Half.BOTTOM)
 		{
 			return false;
@@ -172,31 +178,28 @@ public class ChairListener implements Listener
 		return true;
 	}
 
-	private Float convertFacingToYaw(BlockFace face)
+	@SuppressWarnings("deprecation")
+	private ArmorStand createMountableChair(Block block, Player player)
 	{
-		switch(face)
+		Stairs stairs = (Stairs) block.getState().getBlockData();
+
+		Float yaw = Util.convertFacingToYaw(stairs.getFacing());
+
+		if(yaw == null)
 		{
-			case NORTH:
-				return 0F;
-			case EAST:
-				return 90F;
-			case SOUTH:
-				return 180F;
-			case WEST:
-				return -90F;
-			default:
-				break;
+			return null;
 		}
 
-		return null;
-	}
+		Location location = block.getLocation().add(0.5, -0.4, 0.5);
+		location.setYaw(yaw);
 
-	public void onDisable()
-	{
-		for(ArmorStand armorStand : blockMap.values())
-		{
-			armorStand.eject();
-			armorStand.remove();
-		}
+		ArmorStand armorStand = (ArmorStand) block.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+		armorStand.setPassenger((Entity) player);
+		armorStand.setSmall(true);
+		armorStand.setGravity(false);
+		armorStand.setInvulnerable(true);
+		armorStand.setVisible(false);
+
+		return armorStand;
 	}
 }
