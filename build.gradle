@@ -26,7 +26,7 @@ sourceCompatibility = 1.11
 targetCompatibility = 1.11
 
 dependencies {
-    implementation 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
 	implementation 'com.google.code.gson:gson:2.8.6'
 }
 
@@ -46,4 +46,9 @@ task deploy {
 			}
 		}
 	}
+}
+
+task local (dependsOn: 'jar', type: Copy) {
+	from project.file('build/libs')
+	into 'E:/run/spigot-16.5/plugins'
 }

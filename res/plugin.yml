@@ -10,3 +10,4 @@ commands:
     usage: /skull <player>
   standby:
     usage: /standby <true, false>
+  kit:

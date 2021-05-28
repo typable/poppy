@@ -49,9 +49,8 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event)
 	{
-		// FIXME Conversion Exception on '%
-
-		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + ChatColor.GRAY + event.getMessage();
+		String message = ChatColor.GRAY + event.getMessage().replace("%", "%%");
+		String format = ChatColor.WHITE + event.getPlayer().getName() + ": " + message;
 		event.setFormat(format);
 	}
 
@@ -86,9 +85,9 @@ public class EventListener implements Listener
 				ArmorStand armorstand = (ArmorStand) event.getRightClicked();
 
 				armorstand.setArms(true);
-				event.setCancelled(true);
-				
 				item.setAmount(item.getAmount() - 2);
+				
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -100,7 +99,8 @@ public class EventListener implements Listener
 		{
 			ArmorStand armorstand = (ArmorStand) event.getEntity();
 
-			if(armorstand.hasArms()){
+			if(armorstand.hasArms())
+			{
 				event.getDrops().add(new ItemStack(Material.STICK, 2));
 			}
 		}

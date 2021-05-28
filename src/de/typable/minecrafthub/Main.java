@@ -25,7 +25,9 @@ import de.typable.minecrafthub.event.AutoWorkbenchListener;
 import de.typable.minecrafthub.event.ChairListener;
 import de.typable.minecrafthub.event.DoubleDoorListener;
 import de.typable.minecrafthub.event.EventListener;
+import de.typable.minecrafthub.event.LeavesDecayListener;
 import de.typable.minecrafthub.event.StandbyListener;
+import de.typable.minecrafthub.game.kit.KitGame;
 import de.typable.minecrafthub.util.Util;
 
 
@@ -36,7 +38,10 @@ public class Main extends JavaPlugin
 	private DoubleDoorListener doubleDoorListener;
 	private ChairListener chairListener;
 	private AutoWorkbenchListener autoWorkbenchListener;
+	private LeavesDecayListener leavesDecayListener;
 	private EventListener eventListener;
+
+	private KitGame kitGame;
 
 	private Plugin plugin;
 	private BukkitTask task;
@@ -60,8 +65,15 @@ public class Main extends JavaPlugin
 		autoWorkbenchListener = new AutoWorkbenchListener();
 		pluginManager.registerEvents(autoWorkbenchListener, this);
 
+		leavesDecayListener = new LeavesDecayListener(this);
+		pluginManager.registerEvents(leavesDecayListener, this);
+
 		eventListener = new EventListener();
 		pluginManager.registerEvents(eventListener, this);
+
+		kitGame = new KitGame();
+		this.getCommand("kit").setExecutor(kitGame);
+		pluginManager.registerEvents(kitGame, this);
 		
 		task = Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable()
 		{
@@ -122,8 +134,8 @@ public class Main extends JavaPlugin
 		{
 			Player player = (Player) sender;
 
-			if(label.equals("shutdown")) {
-				
+			if(label.equals("shutdown"))
+			{
 				if(!player.isOp())
 				{
 					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
