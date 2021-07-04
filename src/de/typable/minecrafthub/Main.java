@@ -10,6 +10,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -113,6 +116,11 @@ public class Main extends JavaPlugin
 				}
 			}
 		});
+
+        new WorldCreator("creative")
+            .type(WorldType.FLAT)
+            .generateStructures(false)
+            .createWorld();
 	}
 
 	@Override
@@ -232,6 +240,30 @@ public class Main extends JavaPlugin
 				standbyListener.setEnabled(enabled);
 
 				player.sendMessage(ChatColor.GRAY + "Standby mode is now " + (enabled ? "enabled" : "disabled"));
+			}
+
+			if(label.equals("world"))
+			{
+				if(!player.isOp())
+				{
+					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
+					return true;
+				}
+
+				if(args.length != 1)
+				{
+					return false;
+				}
+				
+				World world = Bukkit.getWorld(args[0]);
+
+				if(world == null)
+				{
+					player.sendMessage(DefaultConstants.Messages.WORLD_NOT_EXIST);
+					return true;
+				}
+
+				player.teleport(world.getSpawnLocation());
 			}
 		}
 

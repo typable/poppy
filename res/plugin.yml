@@ -11,3 +11,5 @@ commands:
   standby:
     usage: /standby <true, false>
   kit:
+  world:
+    usage: /world <name>

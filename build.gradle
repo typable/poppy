@@ -50,5 +50,5 @@ task deploy {
 
 task local (dependsOn: 'jar', type: Copy) {
 	from project.file('build/libs')
-	into 'E:/run/spigot-16.5/plugins'
+	into 'E:/run/spigot-17/plugins'
 }
