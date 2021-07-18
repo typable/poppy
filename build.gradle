@@ -33,7 +33,7 @@ dependencies {
 remotes {
 	server {
 		host = 'mc.typable.dev'
-		user = 'pi'
+		user = 'ubuntu'
 		identity = file('.env/id_rsa')
 	}
 }
@@ -42,7 +42,7 @@ task deploy {
 	doLast {
 		ssh.run {
 			session(remotes.server) {
-				put from: project.file('build/libs/MinecraftHub.jar'), into: '/home/pi/host/plugins'
+				put from: project.file('build/libs/MinecraftHub.jar'), into: '/home/ubuntu/run/mc/plugins'
 			}
 		}
 	}
