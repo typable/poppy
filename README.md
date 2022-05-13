@@ -1,4 +1,5 @@
-# MinecraftHub
+# minecraft-hub
+A Minecraft Server Management Plugin
 
 ### Authentication
 
