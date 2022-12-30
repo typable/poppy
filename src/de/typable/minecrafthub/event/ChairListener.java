@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 import de.typable.minecrafthub.util.Util;
@@ -112,6 +113,15 @@ public class ChairListener implements Listener
 					}
 				}
 
+				Location location = entity.getLocation();
+				location.add(0, 1, 0);
+
+				for(Entity passenger : entity.getPassengers()) {
+					location.setPitch(passenger.getLocation().getPitch());
+					location.setYaw(passenger.getLocation().getYaw());
+					passenger.teleport(location);
+				}
+				
 				entity.remove();
 			}
 		}

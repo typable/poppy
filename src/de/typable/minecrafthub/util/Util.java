@@ -132,4 +132,9 @@ public class Util
 	{
 		return material == Material.AIR || material == Material.CAVE_AIR || material == Material.VOID_AIR;
 	}
+
+	public static boolean isFarmable(Material material)
+	{
+		return material == Material.WHEAT || material == Material.CARROTS || material == Material.POTATOES || material == Material.BEETROOTS || material == Material.NETHER_WART || material == Material.COCOA;
+	}
 }
