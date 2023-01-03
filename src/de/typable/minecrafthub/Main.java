@@ -17,28 +17,27 @@ import org.bukkit.WorldType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Tree;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
-import de.typable.minecrafthub.constant.DefaultConstants;
+import de.typable.minecrafthub.constant.Constants;
 import de.typable.minecrafthub.event.AutoWorkbenchListener;
 import de.typable.minecrafthub.event.ChairListener;
 import de.typable.minecrafthub.event.DoubleDoorListener;
 import de.typable.minecrafthub.event.EventListener;
 import de.typable.minecrafthub.event.LeavesDecayListener;
-import de.typable.minecrafthub.event.StandbyListener;
 import de.typable.minecrafthub.util.Util;
+import de.typable.minecrafthub.config.Config;
 
 
 public class Main extends JavaPlugin
 {
 	private PluginManager pluginManager;
-	private StandbyListener standbyListener;
 	private DoubleDoorListener doubleDoorListener;
 	private ChairListener chairListener;
 	private AutoWorkbenchListener autoWorkbenchListener;
@@ -46,22 +45,15 @@ public class Main extends JavaPlugin
 	private EventListener eventListener;
 
 	private Plugin plugin;
-	private BukkitTask task;
-
-	private static final int BLOCKS_PER_CHUNK = 16;
-	private static final int CHUNKS_PER_EMERALD = 25;
-	private static final int MIN_FEE = 1;
-	private static final int MAX_FEE = 64;
+	private Config config;
 	
 	@Override
 	public void onEnable()
 	{
 		plugin = this;
+		config = new Config("config/minecraft-hub.yml");
 		
 		pluginManager = Bukkit.getPluginManager();
-
-		standbyListener = new StandbyListener(this);
-		pluginManager.registerEvents(standbyListener, this);
 
 		doubleDoorListener = new DoubleDoorListener();
 		pluginManager.registerEvents(doubleDoorListener, this);
@@ -77,60 +69,11 @@ public class Main extends JavaPlugin
 
 		eventListener = new EventListener();
 		pluginManager.registerEvents(eventListener, this);
-		
-		task = Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				try(ServerSocket serverSocket = new ServerSocket(25560))
-				{
-					while(!serverSocket.isClosed())
-					{
-						Socket socket = serverSocket.accept();
-						
-						Util.sendCountdown(plugin, "Server restarts in", 5, new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								for(Player target : Bukkit.getOnlinePlayers())
-								{
-									target.kickPlayer("Server restarting...");
-								}
-								
-								Bukkit.getServer().shutdown();
-							}
-						});
-						
-						socket.close();
-					}
-				}
-				catch(BindException ex)
-				{
-					// ignore
-				}
-				catch(IOException ex)
-				{
-					ex.printStackTrace();
-				}
-			}
-		});
-
-        new WorldCreator("creative")
-            .type(WorldType.FLAT)
-            .generateStructures(false)
-            .createWorld();
 	}
 
 	@Override
 	public void onDisable()
 	{
-		if(task != null && task.isCancelled())
-		{
-			task.cancel();
-		}
-
 		chairListener.onDisable();
 	}
 
@@ -141,42 +84,6 @@ public class Main extends JavaPlugin
 		if(sender instanceof Player)
 		{
 			Player player = (Player) sender;
-
-			if(label.equals("shutdown"))
-			{
-				if(!player.isOp())
-				{
-					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
-					return true;
-				}
-				
-				String path = new File(".").getAbsolutePath();
-				
-				File file = new File(path + "/.shutdown");
-				
-				try
-				{
-					file.createNewFile();
-					
-					Util.sendCountdown(this, "Server shuts down in", 5, new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							for(Player target : Bukkit.getOnlinePlayers())
-							{
-								target.kickPlayer("Server stopped");
-							}
-							
-							Bukkit.getServer().shutdown();
-						}
-					});
-				}
-				catch(IOException ex)
-				{
-					ex.printStackTrace();
-				}
-			}
 			
 			if(label.equals("head"))
 			{
@@ -199,7 +106,7 @@ public class Main extends JavaPlugin
 			{
 				if(!player.isOp())
 				{
-					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
+					player.sendMessage(Constants.Messages.NOT_ENOUGH_PERMISSION);
 					return true;
 				}
 
@@ -216,86 +123,13 @@ public class Main extends JavaPlugin
 				player.getInventory().addItem(skull);
 			}
 
-			if(label.equals("standby"))
-			{
-				if(!player.isOp())
-				{
-					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
-					return true;
-				}
-
-				if(args.length != 1)
-				{
-					return false;
-				}
-
-				String argument = args[0];
-
-				if(!argument.equals("true") && !argument.equals("false"))
-				{
-					return false;
-				}
-
-				boolean enabled = argument.equals("true");
-				standbyListener.setEnabled(enabled);
-
-				player.sendMessage(ChatColor.GRAY + "Standby mode is now " + (enabled ? "enabled" : "disabled"));
-			}
-
-			if(label.equals("world"))
-			{
-				if(!player.isOp())
-				{
-					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
-					return true;
-				}
-
-				if(args.length != 1)
-				{
-					return false;
-				}
-				
-				World world = Bukkit.getWorld(args[0]);
-
-				if(world == null)
-				{
-					player.sendMessage(DefaultConstants.Messages.WORLD_NOT_EXIST);
-					return true;
-				}
-
-				player.teleport(world.getSpawnLocation());
-			}
-
 			if(label.equals("spawn"))
 			{
-				ItemStack item = player.getInventory().getItemInMainHand();
+				final Location location = Bukkit.getWorld("world").getSpawnLocation();
 
-				Location locationSpawn = Bukkit.getWorld("world").getSpawnLocation();
-				Location locationPlayer = player.getLocation();
-
-				Double distance = locationPlayer.distance(locationSpawn);
-
-				int fee = (int) Math.floor(distance / (BLOCKS_PER_CHUNK * CHUNKS_PER_EMERALD));
-
-				if(fee < MIN_FEE)
+				if(travelTo(player, location))
 				{
-					fee = MIN_FEE;
-				}
-
-				if(fee > MAX_FEE)
-				{
-					fee = MAX_FEE;
-				}
-
-				if(item.getType() == Material.EMERALD && item.getAmount() >= fee)
-				{
-
-					item.setAmount(item.getAmount() - fee);
-					player.teleport(locationSpawn);
-				}
-				else
-				{
-					player.sendMessage(ChatColor.RED + "Not enough emeralds to teleport! You need " + fee + " emerald(s) in your main hand.");
+					player.sendMessage(ChatColor.GRAY + "You've been teleported to spawn.");
 				}
 			}
 
@@ -313,7 +147,7 @@ public class Main extends JavaPlugin
 
 				if(!player.isOp()) 
 				{
-					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
+					player.sendMessage(Constants.Messages.NOT_ENOUGH_PERMISSION);
 					return true;
 				}
 
@@ -326,8 +160,137 @@ public class Main extends JavaPlugin
 					player.openInventory(target.getEnderChest());
 				}
 			}
+
+			if(label.equals("sethome"))
+			{
+				try
+				{
+					config.setHome(player);
+					player.sendMessage(ChatColor.YELLOW + "Home point set.");
+				}
+				catch(Exception ex)
+				{
+					player.sendMessage(Constants.Messages.FAILED_TO_SAVE_CONFIG_FILE);
+				}
+			}
+
+			if(label.equals("home"))
+			{
+				final Location location = config.getHome(player);
+
+				if(location == null)
+				{
+					player.sendMessage(ChatColor.RED + "You've don't have a home point.");
+					return true;
+				}
+				
+				if(travelTo(player, location))
+				{
+					player.sendMessage(ChatColor.GRAY + "You've been teleported to your home.");
+				}
+			}
+
+			if(label.equals("setwarp"))
+			{
+				if(args.length != 1)
+				{
+					return false;
+				}
+				
+				final String name = args[0];
+
+				if(!payFee(player, Material.COMPASS, 1))
+				{
+					player.sendMessage(ChatColor.RED + "The fee for creating a warp point is 1 compass!");
+					return true;
+				}
+
+				try
+				{
+					if(!config.setWarp(name, player.getLocation()))
+					{
+						player.sendMessage(ChatColor.RED + "Warp point " + name + " already exists!");
+						return true;
+					}
+					
+					player.sendMessage(ChatColor.YELLOW + "Warp point " + name + " set.");
+				}
+				catch(Exception ex)
+				{
+					player.sendMessage(Constants.Messages.FAILED_TO_SAVE_CONFIG_FILE);
+				}
+			}
+
+			if(label.equals("warp"))
+			{
+				if(args.length != 1)
+				{
+					return false;
+				}
+				
+				final String name = args[0];
+				final Location location = config.getWarp(name);
+
+				if(location == null)
+				{
+					player.sendMessage(ChatColor.RED + "Warp point " + name + " doesn't exist!");
+					return true;
+				}
+				
+				if(travelTo(player, location))
+				{
+					player.sendMessage(ChatColor.GRAY + "You've been teleported to warp point " + name + ".");
+				}
+			}
 		}
 
+		return true;
+	}
+
+	private boolean travelTo(final Player player, final Location location)
+	{
+		final int fee = Util.calcTravelFee(player.getLocation(), location);
+		final String unit = fee == 1 ? "emerald" : "emeralds";
+
+		if(!payFee(player, Material.EMERALD, fee) && player.getGameMode() == GameMode.SURVIVAL)
+		{
+			player.sendMessage(ChatColor.RED + "Not enough emeralds to teleport! Travel fee: " + fee + " " + unit);
+			return false;
+		}
+
+		if(player.getVehicle() != null)
+		{
+			Entity vehicle = player.getVehicle();
+			vehicle.eject();
+			player.teleport(location);
+
+			Bukkit.getScheduler().runTaskLater(plugin, () -> {
+				vehicle.teleport(location);
+			}, 3);
+
+			Bukkit.getScheduler().runTaskLater(plugin, () -> {
+				vehicle.addPassenger(player);
+			}, 6);
+		}
+		else
+		{
+			player.teleport(location);
+		}
+
+		return true;
+	}
+
+	private boolean payFee(final Player player, final Material unit, final int amount)
+	{
+		final ItemStack item = player.getInventory().getItemInMainHand();
+
+		if(item.getType() != unit || item.getAmount() < amount)
+		{
+			return false;
+		}
+
+		item.setAmount(item.getAmount() - amount);
+		
 		return true;
 	}
 }

@@ -1,0 +1,61 @@
+package de.typable.minecrafthub.config;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.Location;
+
+import de.typable.minecrafthub.util.Util;
+
+public class Config
+{
+    private File file;
+    private FileConfiguration configuration;
+
+    public Config(final String path)
+    {
+        this.file = new File(path);
+        this.configuration = YamlConfiguration.loadConfiguration(this.file);
+    }
+
+    public void setHome(final Player player) throws IOException
+    {
+        final String path = "home." + player.getDisplayName();
+        final Location location = Util.calcBlockCenter(player.getLocation());
+    
+        this.configuration.set(path, location);
+        this.configuration.save(this.file);
+    }
+
+    public Location getHome(final Player player)
+    {
+        final String path = "home." + player.getDisplayName();
+    
+        return this.configuration.getLocation(path);
+    }
+
+    public boolean setWarp(final String name, final Location location) throws IOException
+    {
+        final String path = "warp." + name;
+
+        if(this.configuration.getLocation(path) != null)
+        {
+            return false;
+        }
+    
+        this.configuration.set(path, Util.calcBlockCenter(location));
+        this.configuration.save(this.file);
+
+        return true;
+    }
+
+    public Location getWarp(final String name)
+    {
+        final String path = "warp." + name;
+    
+        return this.configuration.getLocation(path);
+    }
+}

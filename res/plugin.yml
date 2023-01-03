@@ -4,16 +4,16 @@ version: 0.0.1
 author: typable
 api-version: 1.16
 commands:
-  shutdown:
   head:
   skull:
     usage: /skull <player>
-  standby:
-    usage: /standby <true, false>
-  kit:
-  world:
-    usage: /world <name>
   spawn:
     usage: /spawn
   invsee:
     usage: /invsee <name> <enderchest>
+  sethome:
+  home:
+  setwarp:
+    usage: /setwarp <name>
+  warp:
+    usage: /warp <name>

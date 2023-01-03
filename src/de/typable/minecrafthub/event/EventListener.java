@@ -47,9 +47,8 @@ public class EventListener implements Listener
 			}
 		}
 
-		// farming with right click
-
 		EquipmentSlot equip = event.getHand();
+
 		if(equip.equals(EquipmentSlot.HAND))
 		{
 

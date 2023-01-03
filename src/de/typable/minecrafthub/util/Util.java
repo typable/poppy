@@ -11,8 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.Location;
 
-import de.typable.minecrafthub.constant.DefaultConstants;
+import de.typable.minecrafthub.constant.Constants;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -110,7 +111,7 @@ public class Util
 				
 				count--;
 			}
-		}, 0L, DefaultConstants.TICK);
+		}, 0L, Constants.TICK);
 	}
 
 	public static Float convertFacingToYaw(BlockFace face)
@@ -156,5 +157,33 @@ public class Util
 		Material blockWest = blockLocation.clone().add(-1, 0, 0).getBlock().getType();
 
 		return isStem(blockNorth) || isStem(blockEast) || isStem(blockSouth) || isStem(blockWest);
+	}
+	
+	public static Location calcBlockCenter(final Location location)
+	{
+		Location centered = location.clone();
+		centered.setX(Location.locToBlock(location.getX()) + 0.5);
+		centered.setY(Location.locToBlock(location.getY()));
+		centered.setZ(Location.locToBlock(location.getZ()) + 0.5);
+
+		return centered;
+	}
+
+	public static int calcTravelFee(final Location from, final Location to)
+	{
+		final Double distance = from.distance(to);
+		int fee = (int) Math.floor(distance / (Constants.BLOCKS_PER_CHUNK * Constants.CHUNKS_PER_EMERALD));
+
+		if(fee < Constants.MIN_FEE)
+		{
+			fee = Constants.MIN_FEE;
+		}
+
+		if(fee > Constants.MAX_FEE)
+		{
+			fee = Constants.MAX_FEE;
+		}
+
+		return fee;
 	}
 }
