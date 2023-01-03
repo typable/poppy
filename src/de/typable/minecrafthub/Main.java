@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.material.Tree;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -241,6 +242,18 @@ public class Main extends JavaPlugin
 				{
 					player.sendMessage(ChatColor.GRAY + "You've been teleported to warp point " + name + ".");
 				}
+			}
+
+			if(label.equals("info"))
+			{
+				final ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+				final BookMeta meta = (BookMeta) book.getItemMeta();
+				meta.setTitle("Info");
+				meta.setAuthor("Server");
+				meta.setPages(config.getInfoPages());
+				book.setItemMeta(meta);
+		
+				player.openBook(book);
 			}
 		}
 

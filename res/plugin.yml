@@ -17,3 +17,4 @@ commands:
     usage: /setwarp <name>
   warp:
     usage: /warp <name>
+  info:

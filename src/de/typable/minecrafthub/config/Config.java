@@ -2,6 +2,8 @@ package de.typable.minecrafthub.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -57,5 +59,20 @@ public class Config
         final String path = "warp." + name;
     
         return this.configuration.getLocation(path);
+    }
+
+    public List<String> getInfoPages()
+    {
+        final String path = "info";
+
+        try
+        {
+            this.configuration.load(this.file);
+            return (List<String>) this.configuration.getList(path);
+        }
+        catch(Exception ex)
+        {
+            return new ArrayList<>();
+        }
     }
 }
