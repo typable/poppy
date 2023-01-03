@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin;
 
 public class LeavesDecayListener implements Listener
 {
-	private static final int DELAY = 50;
+	private static final int DELAY = 25;
 	private static final List<BlockFace> NEIGHBORS = Arrays.asList(
 		BlockFace.UP,
 		BlockFace.NORTH,

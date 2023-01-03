@@ -50,7 +50,8 @@ public class EventListener implements Listener
 		// farming with right click
 
 		EquipmentSlot equip = event.getHand();
-		if(equip.equals(EquipmentSlot.HAND)) {
+		if(equip.equals(EquipmentSlot.HAND))
+		{
 
 			if(event.getAction() == Action.RIGHT_CLICK_BLOCK) 
 			{
@@ -78,6 +79,8 @@ public class EventListener implements Listener
 					if(Util.isFarmable(material) && ageable.getAge() == ageable.getMaximumAge()) 
 					{
 
+						event.setCancelled(true);
+
 						if(blockdata instanceof Directional) 
 						{
 							Directional directional = (Directional) blockdata;
@@ -92,15 +95,18 @@ public class EventListener implements Listener
 						} 
 						else 
 						{
+
 							block.breakNaturally(player.getItemInUse());
 							block.setType(material);
 						}
-
 					}
+				}
 
+				if(material == Material.MELON && Util.hasStem(block) || material == Material.PUMPKIN && Util.hasStem(block))
+				{
+					block.breakNaturally(player.getInventory().getItemInMainHand());
 				}
 			}
-
 		}
 	}
 

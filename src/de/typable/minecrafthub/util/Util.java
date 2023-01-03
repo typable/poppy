@@ -1,7 +1,11 @@
 package de.typable.minecrafthub.util;
 
+import javax.swing.text.Position;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -136,5 +140,21 @@ public class Util
 	public static boolean isFarmable(Material material)
 	{
 		return material == Material.WHEAT || material == Material.CARROTS || material == Material.POTATOES || material == Material.BEETROOTS || material == Material.NETHER_WART || material == Material.COCOA;
+	}
+
+	public static boolean isStem(Material material)
+	{
+		return material == Material.ATTACHED_PUMPKIN_STEM || material == Material.ATTACHED_MELON_STEM;
+	}
+
+	public static boolean hasStem(Block block)
+	{
+		Location blockLocation = block.getLocation();
+		Material blockNorth = blockLocation.clone().add(0, 0, -1).getBlock().getType();
+		Material blockEast = blockLocation.clone().add(1, 0, 0).getBlock().getType();
+		Material blockSouth = blockLocation.clone().add(0, 0, 1).getBlock().getType();
+		Material blockWest = blockLocation.clone().add(-1, 0, 0).getBlock().getType();
+
+		return isStem(blockNorth) || isStem(blockEast) || isStem(blockSouth) || isStem(blockWest);
 	}
 }

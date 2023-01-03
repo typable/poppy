@@ -13,3 +13,7 @@ commands:
   kit:
   world:
     usage: /world <name>
+  spawn:
+    usage: /spawn
+  invsee:
+    usage: /invsee <name> <enderchest>

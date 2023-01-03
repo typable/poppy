@@ -9,6 +9,7 @@ import java.net.Socket;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -18,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.Tree;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,6 +47,11 @@ public class Main extends JavaPlugin
 
 	private Plugin plugin;
 	private BukkitTask task;
+
+	private static final int BLOCKS_PER_CHUNK = 16;
+	private static final int CHUNKS_PER_EMERALD = 25;
+	private static final int MIN_FEE = 1;
+	private static final int MAX_FEE = 64;
 	
 	@Override
 	public void onEnable()
@@ -257,6 +264,67 @@ public class Main extends JavaPlugin
 				}
 
 				player.teleport(world.getSpawnLocation());
+			}
+
+			if(label.equals("spawn"))
+			{
+				ItemStack item = player.getInventory().getItemInMainHand();
+
+				Location locationSpawn = Bukkit.getWorld("world").getSpawnLocation();
+				Location locationPlayer = player.getLocation();
+
+				Double distance = locationPlayer.distance(locationSpawn);
+
+				int fee = (int) Math.floor(distance / (BLOCKS_PER_CHUNK * CHUNKS_PER_EMERALD));
+
+				if(fee < MIN_FEE)
+				{
+					fee = MIN_FEE;
+				}
+
+				if(fee > MAX_FEE)
+				{
+					fee = MAX_FEE;
+				}
+
+				if(item.getType() == Material.EMERALD && item.getAmount() >= fee)
+				{
+
+					item.setAmount(item.getAmount() - fee);
+					player.teleport(locationSpawn);
+				}
+				else
+				{
+					player.sendMessage(ChatColor.RED + "Not enough emeralds to teleport! You need " + fee + " emerald(s) in your main hand.");
+				}
+			}
+
+			if(label.equals("invsee"))
+			{
+				if(args.length == 0) {
+					return false;
+				}
+
+				if(Bukkit.getPlayer(args[0]) == null)
+				{
+					player.sendMessage(ChatColor.RED + "Player not found!");
+					return true;
+				}
+
+				if(!player.isOp()) 
+				{
+					player.sendMessage(DefaultConstants.Messages.NOT_ENOUGH_PERMISSION);
+					return true;
+				}
+
+				Player target = Bukkit.getPlayer(args[0]);
+
+				player.openInventory(target.getInventory());
+
+				if(args.length == 1 && args[1].toLowerCase() == "enderchest")
+				{
+					player.openInventory(target.getEnderChest());
+				}
 			}
 		}
 
