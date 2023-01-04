@@ -1,13 +1,13 @@
 # minecraft-hub
 A Minecraft Server Management Plugin
 
-### Export as Jar File
+### Export as JAR file
 
 ```bash
 gradle build
 ```
 
-### Transfer to Local Server
+### Build and transfer to local server
 
 Custom configuration required!
 
