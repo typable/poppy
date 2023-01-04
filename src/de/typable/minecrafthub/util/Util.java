@@ -8,10 +8,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.Location;
+import org.bukkit.GameMode;
+import org.bukkit.plugin.Plugin;
 
 import de.typable.minecrafthub.constant.Constants;
 import net.md_5.bungee.api.ChatColor;
@@ -185,5 +188,52 @@ public class Util
 		}
 
 		return fee;
+	}
+
+	public static boolean travelTo(final Plugin plugin, final Player player, final Location location)
+	{
+		final int fee = Util.calcTravelFee(player.getLocation(), location);
+		final String unit = fee == 1 ? "emerald" : "emeralds";
+
+		if(!payFee(player, Material.EMERALD, fee) && player.getGameMode() == GameMode.SURVIVAL)
+		{
+			player.sendMessage(ChatColor.RED + "Not enough emeralds to teleport! Travel fee: " + fee + " " + unit);
+			return false;
+		}
+
+		if(player.getVehicle() != null)
+		{
+			Entity vehicle = player.getVehicle();
+			vehicle.eject();
+			player.teleport(location);
+
+			Bukkit.getScheduler().runTaskLater(plugin, () -> {
+				vehicle.teleport(location);
+			}, 3);
+
+			Bukkit.getScheduler().runTaskLater(plugin, () -> {
+				vehicle.addPassenger(player);
+			}, 6);
+		}
+		else
+		{
+			player.teleport(location);
+		}
+
+		return true;
+	}
+
+	public static boolean payFee(final Player player, final Material unit, final int amount)
+	{
+		final ItemStack item = player.getInventory().getItemInMainHand();
+
+		if(item.getType() != unit || item.getAmount() < amount)
+		{
+			return false;
+		}
+
+		item.setAmount(item.getAmount() - amount);
+		
+		return true;
 	}
 }

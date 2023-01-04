@@ -64,15 +64,23 @@ public class Config
     public List<String> getInfoPages()
     {
         final String path = "info";
+        List<String> pages = null;
 
         try
         {
             this.configuration.load(this.file);
-            return (List<String>) this.configuration.getList(path);
+            pages = (List<String>) this.configuration.getList(path);
         }
         catch(Exception ex)
         {
-            return new ArrayList<>();
+            // ignore
         }
+
+        if(pages == null)
+        {
+            pages = new ArrayList<>();
+        }
+
+        return pages;
     }
 }
