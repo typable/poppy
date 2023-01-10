@@ -1,4 +1,4 @@
-package de.typable.minecrafthub.event;
+package poppy.modules;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,10 +20,10 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import de.typable.minecrafthub.util.Util;
+import poppy.Utils;
 
 
-public class AutoWorkbenchListener implements Listener
+public class AutoWorkbenchModule implements Listener
 {
 	@EventHandler
 	public void onItemMove(InventoryMoveItemEvent event)
@@ -69,7 +69,7 @@ public class AutoWorkbenchListener implements Listener
 
 	private Recipe getCraftingRecipe(ItemStack item, Inventory source, Inventory target)
 	{
-		if(Util.isEmpty(item))
+		if(Utils.isEmpty(item))
 		{
 			return null;
 		}
@@ -80,7 +80,7 @@ public class AutoWorkbenchListener implements Listener
 		{
 			Recipe recipe = iterator.next();
 
-			if(Util.compare(item, recipe.getResult()))
+			if(Utils.compare(item, recipe.getResult()))
 			{
 				List<ItemStack> ingredients = null;
 
@@ -101,7 +101,7 @@ public class AutoWorkbenchListener implements Listener
 					{
 						if(ingredients.isEmpty())
 						{
-							if(!Util.isEmpty(value))
+							if(!Utils.isEmpty(value))
 							{
 								ingredients.add(value);
 							}
@@ -123,7 +123,7 @@ public class AutoWorkbenchListener implements Listener
 					continue;
 				}
 
-				if(Util.isInventoryFull(target, recipe.getResult()))
+				if(Utils.isInventoryFull(target, recipe.getResult()))
 				{
 					return null;
 				}
@@ -141,7 +141,7 @@ public class AutoWorkbenchListener implements Listener
 	{
 		for(ItemStack ingredient : ingredients)
 		{
-			if(Util.isEmpty(ingredient))
+			if(Utils.isEmpty(ingredient))
 			{
 				continue;
 			}
@@ -154,12 +154,12 @@ public class AutoWorkbenchListener implements Listener
 			{
 				ItemStack item = iterator.next();
 				
-				if(Util.isEmpty(item))
+				if(Utils.isEmpty(item))
 				{
 					continue;
 				}
 				
-				if(Util.compare(item, ingredient))
+				if(Utils.compare(item, ingredient))
 				{
 					if(item.getAmount() > amount)
 					{
@@ -191,7 +191,7 @@ public class AutoWorkbenchListener implements Listener
 	{
 		for(ItemStack ingredient : ingredients)
 		{
-			if(Util.compare(item, ingredient))
+			if(Utils.compare(item, ingredient))
 			{
 				ingredient.setAmount(ingredient.getAmount() + item.getAmount());
 				
@@ -199,7 +199,7 @@ public class AutoWorkbenchListener implements Listener
 			}
 		}
 		
-		if(!Util.isEmpty(item))
+		if(!Utils.isEmpty(item))
 		{
 			ingredients.add(item);
 		}
@@ -209,7 +209,7 @@ public class AutoWorkbenchListener implements Listener
 	{
 		for(ItemStack ingredient : ingredients)
 		{
-			if(ingredient != null && !Util.containsAtLeast(inventory, ingredient, ingredient.getAmount()))
+			if(ingredient != null && !Utils.containsAtLeast(inventory, ingredient, ingredient.getAmount()))
 			{
 				return false;
 			}

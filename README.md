@@ -1,5 +1,5 @@
-# minecraft-hub
-A Minecraft Server Management Plugin
+# poppy
+A Minecraft server management plugin
 
 ### Export as JAR file
 

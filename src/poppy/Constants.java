@@ -1,4 +1,4 @@
-package de.typable.minecrafthub.constant;
+package poppy;
 
 import org.bukkit.ChatColor;
 

@@ -1,4 +1,4 @@
-package de.typable.minecrafthub.event;
+package poppy.modules;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,10 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import de.typable.minecrafthub.util.Util;
+import poppy.Utils;
 
 
-public class DoubleDoorListener implements Listener
+public class DoubleDoorModule implements Listener
 {
 	private static final Material[] DOOR_TYPE = new Material[] { Material.OAK_DOOR, Material.SPRUCE_DOOR, Material.BIRCH_DOOR, Material.JUNGLE_DOOR, Material.ACACIA_DOOR, Material.DARK_OAK_DOOR, Material.ACACIA_DOOR, Material.CRIMSON_DOOR, Material.WARPED_DOOR };
 
@@ -34,12 +34,12 @@ public class DoubleDoorListener implements Listener
 				{
 					if(player.isSneaking())
 					{
-						if(!Util.isEmpty(player.getInventory().getItemInMainHand()))
+						if(!Utils.isEmpty(player.getInventory().getItemInMainHand()))
 						{
 							return;
 						}
 
-						if(!Util.isEmpty(player.getInventory().getItemInOffHand()))
+						if(!Utils.isEmpty(player.getInventory().getItemInOffHand()))
 						{
 							return;
 						}

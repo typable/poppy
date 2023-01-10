@@ -1,4 +1,4 @@
-package de.typable.minecrafthub.config;
+package poppy;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
 
-import de.typable.minecrafthub.util.Util;
+import poppy.Utils;
 
 public class Config
 {
@@ -26,7 +26,7 @@ public class Config
     public void setHome(final Player player) throws IOException
     {
         final String path = "home." + player.getDisplayName();
-        final Location location = Util.calcBlockCenter(player.getLocation());
+        final Location location = Utils.calcBlockCenter(player.getLocation());
     
         this.configuration.set(path, location);
         this.configuration.save(this.file);
@@ -48,7 +48,7 @@ public class Config
             return false;
         }
     
-        this.configuration.set(path, Util.calcBlockCenter(location));
+        this.configuration.set(path, Utils.calcBlockCenter(location));
         this.configuration.save(this.file);
 
         return true;

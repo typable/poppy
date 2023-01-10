@@ -1,4 +1,4 @@
-package de.typable.minecrafthub;
+package poppy;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,28 +25,28 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.typable.minecrafthub.constant.Constants;
-import de.typable.minecrafthub.event.AutoWorkbenchListener;
-import de.typable.minecrafthub.event.ChairListener;
-import de.typable.minecrafthub.event.DoubleDoorListener;
-import de.typable.minecrafthub.event.EventListener;
-import de.typable.minecrafthub.event.LeavesDecayListener;
-import de.typable.minecrafthub.util.Util;
-import de.typable.minecrafthub.config.Config;
+import poppy.Constants;
+import poppy.Config;
+import poppy.Utils;
+import poppy.modules.AutoWorkbenchModule;
+import poppy.modules.ChairModule;
+import poppy.modules.DoubleDoorModule;
+import poppy.modules.CommonModule;
+import poppy.modules.LeavesDecayModule;
 
 
 public class Main extends JavaPlugin
 {
-	private PluginManager pluginManager;
-	private DoubleDoorListener doubleDoorListener;
-	private ChairListener chairListener;
-	private AutoWorkbenchListener autoWorkbenchListener;
-	private LeavesDecayListener leavesDecayListener;
-	private EventListener eventListener;
-
 	private Plugin plugin;
 	private Config config;
-	
+	private PluginManager pluginManager;
+
+	private DoubleDoorModule doubleDoorModule;
+	private ChairModule chairModule;
+	private AutoWorkbenchModule autoWorkbenchModule;
+	private LeavesDecayModule leavesDecayModule;
+	private CommonModule commonModule;
+
 	@Override
 	public void onEnable()
 	{
@@ -55,26 +55,26 @@ public class Main extends JavaPlugin
 		
 		pluginManager = Bukkit.getPluginManager();
 
-		doubleDoorListener = new DoubleDoorListener();
-		pluginManager.registerEvents(doubleDoorListener, this);
+		doubleDoorModule = new DoubleDoorModule();
+		pluginManager.registerEvents(doubleDoorModule, this);
 
-		chairListener = new ChairListener();
-		pluginManager.registerEvents(chairListener, this);
+		chairModule = new ChairModule();
+		pluginManager.registerEvents(chairModule, this);
 		
-		autoWorkbenchListener = new AutoWorkbenchListener();
-		pluginManager.registerEvents(autoWorkbenchListener, this);
+		autoWorkbenchModule = new AutoWorkbenchModule();
+		pluginManager.registerEvents(autoWorkbenchModule, this);
 
-		leavesDecayListener = new LeavesDecayListener(this);
-		pluginManager.registerEvents(leavesDecayListener, this);
+		leavesDecayModule = new LeavesDecayModule(this);
+		pluginManager.registerEvents(leavesDecayModule, this);
 
-		eventListener = new EventListener();
-		pluginManager.registerEvents(eventListener, this);
+		commonModule = new CommonModule();
+		pluginManager.registerEvents(commonModule, this);
 	}
 
 	@Override
 	public void onDisable()
 	{
-		chairListener.onDisable();
+		chairModule.onDisable();
 	}
 
 	@Override
@@ -200,7 +200,7 @@ public class Main extends JavaPlugin
 	{
 		final Location location = Bukkit.getWorld("world").getSpawnLocation();
 
-		if(Util.travelTo(plugin, player, location))
+		if(Utils.travelTo(plugin, player, location))
 		{
 			player.sendMessage(ChatColor.GRAY + "You've been teleported to spawn.");
 		}
@@ -218,7 +218,7 @@ public class Main extends JavaPlugin
 			return true;
 		}
 		
-		if(Util.travelTo(plugin, player, location))
+		if(Utils.travelTo(plugin, player, location))
 		{
 			player.sendMessage(ChatColor.GRAY + "You've been teleported to your home.");
 		}
@@ -242,7 +242,7 @@ public class Main extends JavaPlugin
 			return true;
 		}
 		
-		if(Util.travelTo(plugin, player, location))
+		if(Utils.travelTo(plugin, player, location))
 		{
 			player.sendMessage(ChatColor.GRAY + "You've been teleported to warp point " + name + ".");
 		}
@@ -274,7 +274,7 @@ public class Main extends JavaPlugin
 		
 		final String name = args[0];
 
-		if(!Util.payFee(player, Material.COMPASS, 1))
+		if(!Utils.payFee(player, Material.COMPASS, 1))
 		{
 			player.sendMessage(ChatColor.RED + "The fee for creating a warp point is 1 compass!");
 			return true;

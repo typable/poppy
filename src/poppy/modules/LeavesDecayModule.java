@@ -1,4 +1,4 @@
-package de.typable.minecrafthub.event;
+package poppy.modules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.plugin.Plugin;
 
-public class LeavesDecayListener implements Listener
+public class LeavesDecayModule implements Listener
 {
 	private static final int DELAY = 25;
 	private static final List<BlockFace> NEIGHBORS = Arrays.asList(
@@ -30,7 +30,7 @@ public class LeavesDecayListener implements Listener
 	private Plugin plugin;
 	private List<Block> scheduled = new ArrayList<>();
 
-	public LeavesDecayListener(Plugin plugin)
+	public LeavesDecayModule(Plugin plugin)
 	{
 		this.plugin = plugin;
 	}

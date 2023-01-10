@@ -1,6 +1,4 @@
-package de.typable.minecrafthub.util;
-
-import javax.swing.text.Position;
+package poppy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,13 +14,14 @@ import org.bukkit.Location;
 import org.bukkit.GameMode;
 import org.bukkit.plugin.Plugin;
 
-import de.typable.minecrafthub.constant.Constants;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import poppy.Constants;
 
-public class Util
+
+public class Utils
 {
 	public static boolean isEmpty(ItemStack item)
 	{
@@ -53,7 +52,7 @@ public class Util
 	{
 		for(ItemStack item : inventory.getContents())
 		{
-			if(Util.isEmpty(item))
+			if(Utils.isEmpty(item))
 			{
 				return false;
 			}
@@ -76,7 +75,7 @@ public class Util
 		{
 			ItemStack current = inventory.getItem(i);
 
-			if(Util.compare(item, current))
+			if(Utils.compare(item, current))
 			{
 				amount -= current.getAmount();
 
@@ -192,7 +191,7 @@ public class Util
 
 	public static boolean travelTo(final Plugin plugin, final Player player, final Location location)
 	{
-		final int fee = Util.calcTravelFee(player.getLocation(), location);
+		final int fee = Utils.calcTravelFee(player.getLocation(), location);
 		final String unit = fee == 1 ? "emerald" : "emeralds";
 
 		if(!payFee(player, Material.EMERALD, fee) && player.getGameMode() == GameMode.SURVIVAL)

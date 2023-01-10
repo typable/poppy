@@ -1,4 +1,4 @@
-package de.typable.minecrafthub.event;
+package poppy.modules;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,10 +25,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import de.typable.minecrafthub.util.Util;
+import poppy.Utils;
 
 
-public class EventListener implements Listener
+public class CommonModule implements Listener
 {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event)
@@ -75,7 +75,7 @@ public class EventListener implements Listener
 
 					Ageable ageable = (Ageable) blockdata;
 	
-					if(Util.isFarmable(material) && ageable.getAge() == ageable.getMaximumAge()) 
+					if(Utils.isFarmable(material) && ageable.getAge() == ageable.getMaximumAge()) 
 					{
 
 						event.setCancelled(true);
@@ -101,7 +101,7 @@ public class EventListener implements Listener
 					}
 				}
 
-				if(material == Material.MELON && Util.hasStem(block) || material == Material.PUMPKIN && Util.hasStem(block))
+				if(material == Material.MELON && Utils.hasStem(block) || material == Material.PUMPKIN && Utils.hasStem(block))
 				{
 					block.breakNaturally(player.getInventory().getItemInMainHand());
 				}

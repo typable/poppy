@@ -1,7 +1,7 @@
-main: de.typable.minecrafthub.Main
-name: MinecraftHub
+main: poppy.Main
+name: poppy
 version: 0.0.1
-author: typable
+author: typable, chunksize
 api-version: 1.16
 commands:
   head:
@@ -10,7 +10,7 @@ commands:
   spawn:
     usage: /spawn
   invsee:
-    usage: /invsee <name> <enderchest>
+    usage: /invsee <name>
   sethome:
   home:
   setwarp:

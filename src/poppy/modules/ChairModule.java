@@ -1,4 +1,4 @@
-package de.typable.minecrafthub.event;
+package poppy.modules;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +21,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
-import de.typable.minecrafthub.util.Util;
+import poppy.Utils;
 
 
-public class ChairListener implements Listener
+public class ChairModule implements Listener
 {
 	private static final Material[] CHAIR_TYPE = new Material[]
 	{
@@ -163,7 +163,7 @@ public class ChairListener implements Listener
 	{
 		Block upperBlock = block.getWorld().getBlockAt(block.getLocation().add(0, 1, 0));
 
-		if(!Util.isAir(upperBlock.getType()))
+		if(!Utils.isAir(upperBlock.getType()))
 		{
 			return false;
 		}
@@ -193,7 +193,7 @@ public class ChairListener implements Listener
 	{
 		Stairs stairs = (Stairs) block.getState().getBlockData();
 
-		Float yaw = Util.convertFacingToYaw(stairs.getFacing());
+		Float yaw = Utils.convertFacingToYaw(stairs.getFacing());
 
 		if(yaw == null)
 		{
