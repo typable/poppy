@@ -1,34 +1,22 @@
 package poppy;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.BindException;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.material.Tree;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import poppy.Constants;
-import poppy.Config;
-import poppy.Utils;
 import poppy.modules.AutoWorkbenchModule;
+import poppy.modules.CauldronModule;
 import poppy.modules.ChairModule;
 import poppy.modules.DoubleDoorModule;
 import poppy.modules.CommonModule;
@@ -40,12 +28,13 @@ public class Main extends JavaPlugin
 	private Plugin plugin;
 	private Config config;
 	private PluginManager pluginManager;
-
+	
+	private CommonModule commonModule;
 	private DoubleDoorModule doubleDoorModule;
 	private ChairModule chairModule;
 	private AutoWorkbenchModule autoWorkbenchModule;
 	private LeavesDecayModule leavesDecayModule;
-	private CommonModule commonModule;
+	private CauldronModule cauldronModule;
 
 	@Override
 	public void onEnable()
@@ -54,6 +43,9 @@ public class Main extends JavaPlugin
 		config = new Config("config/minecraft-hub.yml");
 		
 		pluginManager = Bukkit.getPluginManager();
+
+		commonModule = new CommonModule();
+		pluginManager.registerEvents(commonModule, this);
 
 		doubleDoorModule = new DoubleDoorModule();
 		pluginManager.registerEvents(doubleDoorModule, this);
@@ -67,8 +59,8 @@ public class Main extends JavaPlugin
 		leavesDecayModule = new LeavesDecayModule(this);
 		pluginManager.registerEvents(leavesDecayModule, this);
 
-		commonModule = new CommonModule();
-		pluginManager.registerEvents(commonModule, this);
+		cauldronModule = new CauldronModule(this);
+		pluginManager.registerEvents(cauldronModule, this);
 	}
 
 	@Override

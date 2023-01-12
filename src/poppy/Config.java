@@ -10,8 +10,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
 
-import poppy.Utils;
-
 public class Config
 {
     private File file;
@@ -69,7 +67,7 @@ public class Config
         try
         {
             this.configuration.load(this.file);
-            pages = (List<String>) this.configuration.getList(path);
+            pages = this.configuration.getStringList(path);
         }
         catch(Exception ex)
         {

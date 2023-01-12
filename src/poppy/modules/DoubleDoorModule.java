@@ -17,7 +17,18 @@ import poppy.Utils;
 
 public class DoubleDoorModule implements Listener
 {
-	private static final Material[] DOOR_TYPE = new Material[] { Material.OAK_DOOR, Material.SPRUCE_DOOR, Material.BIRCH_DOOR, Material.JUNGLE_DOOR, Material.ACACIA_DOOR, Material.DARK_OAK_DOOR, Material.ACACIA_DOOR, Material.CRIMSON_DOOR, Material.WARPED_DOOR };
+	private static final Material[] DOOR_TYPE = new Material[]
+	{ 
+		Material.OAK_DOOR,
+		Material.SPRUCE_DOOR,
+		Material.BIRCH_DOOR,
+		Material.JUNGLE_DOOR,
+		Material.ACACIA_DOOR,
+		Material.DARK_OAK_DOOR,
+		Material.ACACIA_DOOR,
+		Material.CRIMSON_DOOR,
+		Material.WARPED_DOOR
+	};
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event)

@@ -10,15 +10,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.Location;
 import org.bukkit.GameMode;
-import org.bukkit.plugin.Plugin;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-
-import poppy.Constants;
 
 
 public class Utils

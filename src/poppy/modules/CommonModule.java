@@ -33,8 +33,7 @@ public class CommonModule implements Listener
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
 		if(event.getAction() == Action.PHYSICAL)
 		{
@@ -47,33 +46,32 @@ public class CommonModule implements Listener
 			}
 		}
 
-		EquipmentSlot equip = event.getHand();
-
-		if(equip.equals(EquipmentSlot.HAND))
+		if(event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
+			final EquipmentSlot equip = event.getHand();
 
-			if(event.getAction() == Action.RIGHT_CLICK_BLOCK) 
+			if(equip.equals(EquipmentSlot.HAND)) 
 			{
-				Block block = event.getClickedBlock();
+				final Block block = event.getClickedBlock();
 	
 				if(block == null) 
 				{
 					return;
 				}
 
-				Material material = block.getType();
+				final Material material = block.getType();
 
 				if(player.isSneaking()) 
 				{
 					return;
 				}
 
-				BlockData blockdata = block.getBlockData();
+				final BlockData blockdata = block.getBlockData();
 
 				if(blockdata instanceof Ageable) 
 				{
 
-					Ageable ageable = (Ageable) blockdata;
+					final Ageable ageable = (Ageable) blockdata;
 	
 					if(Utils.isFarmable(material) && ageable.getAge() == ageable.getMaximumAge()) 
 					{
@@ -83,7 +81,7 @@ public class CommonModule implements Listener
 						if(blockdata instanceof Directional) 
 						{
 							Directional directional = (Directional) blockdata;
-							BlockFace blockface = directional.getFacing();
+							final BlockFace blockface = directional.getFacing();
 
 							block.breakNaturally(player.getItemInUse());
 							block.setType(material);
@@ -94,7 +92,6 @@ public class CommonModule implements Listener
 						} 
 						else 
 						{
-
 							block.breakNaturally(player.getItemInUse());
 							block.setType(material);
 						}
@@ -131,11 +128,11 @@ public class CommonModule implements Listener
 	{
 		if(event.getDamager() instanceof Snowball)
 		{
-			Snowball snowball = (Snowball) event.getDamager();
+			final Snowball snowball = (Snowball) event.getDamager();
 
 			if(snowball.getShooter() instanceof Player)
 			{
-				Player player = (Player) event.getEntity();
+				final Player player = (Player) event.getEntity();
 
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 1));
 				event.setDamage(1);
@@ -146,15 +143,15 @@ public class CommonModule implements Listener
 	@EventHandler
 	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event)
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
 		if(event.getRightClicked().getType().equals(EntityType.ARMOR_STAND))
 		{
-			ItemStack item = player.getInventory().getItemInMainHand();
+			final ItemStack item = player.getInventory().getItemInMainHand();
 			
 			if(item.getType() == Material.STICK && item.getAmount() > 1 && player.isSneaking())
 			{
-				ArmorStand armorstand = (ArmorStand) event.getRightClicked();
+				final ArmorStand armorstand = (ArmorStand) event.getRightClicked();
 
 				armorstand.setArms(true);
 				item.setAmount(item.getAmount() - 2);
@@ -169,7 +166,7 @@ public class CommonModule implements Listener
 	{
 		if(event.getEntity() instanceof ArmorStand)
 		{
-			ArmorStand armorstand = (ArmorStand) event.getEntity();
+			final ArmorStand armorstand = (ArmorStand) event.getEntity();
 
 			if(armorstand.hasArms())
 			{
