@@ -225,18 +225,18 @@ public class Main extends JavaPlugin
 			return false;
 		}
 		
-		final String name = args[0];
-		final Location location = config.getWarp(name.toLowerCase());
+		final String name = args[0].toLowerCase();
+		final Location location = config.getWarp(name);
 
 		if(location == null)
 		{
-			player.sendMessage(ChatColor.RED + "Warp point " + name + " doesn't exist!");
+			player.sendMessage(ChatColor.RED + "Warppoint " + name + " doesn't exist!");
 			return true;
 		}
 		
 		if(Utils.travelTo(plugin, player, location))
 		{
-			player.sendMessage(ChatColor.GRAY + "You've been teleported to warp point " + name + ".");
+			player.sendMessage(ChatColor.GRAY + "You've been teleported to warppoint " + name + ".");
 		}
 
 		return true;
@@ -264,23 +264,23 @@ public class Main extends JavaPlugin
 			return false;
 		}
 		
-		final String name = args[0];
+		final String name = args[0].toLowerCase();
 
 		if(!Utils.payFee(player, Material.COMPASS, 1))
 		{
-			player.sendMessage(ChatColor.RED + "The fee for creating a warp point is 1 compass!");
+			player.sendMessage(ChatColor.RED + "The fee for creating a warppoint is 1 compass!");
 			return true;
 		}
 
 		try
 		{
-			if(!config.setWarp(name.toLowerCase(), player.getLocation()))
+			if(!config.setWarp(name, player.getLocation()))
 			{
-				player.sendMessage(ChatColor.RED + "Warp point " + name + " already exists!");
+				player.sendMessage(ChatColor.RED + "Warppoint " + name + " already exists!");
 				return true;
 			}
 			
-			player.sendMessage(ChatColor.YELLOW + "Warp point " + name + " set.");
+			player.sendMessage(ChatColor.YELLOW + "Warppoint " + name + " set.");
 		}
 		catch(Exception ex)
 		{
