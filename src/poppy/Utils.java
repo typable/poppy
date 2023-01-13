@@ -169,6 +169,11 @@ public class Utils
 
 	public static int calcTravelFee(final Location from, final Location to)
 	{
+		if(!isLocationInSameWorld(from, to))
+		{
+			return 0;
+		}
+	
 		final Double distance = from.distance(to);
 		int fee = (int) Math.floor(distance / (Constants.BLOCKS_PER_CHUNK * Constants.CHUNKS_PER_EMERALD));
 
@@ -187,6 +192,12 @@ public class Utils
 
 	public static boolean travelTo(final Plugin plugin, final Player player, final Location location)
 	{
+		if(!isLocationInSameWorld(player.getLocation(), location))
+		{
+			player.sendMessage(ChatColor.RED + "The warppoint cannot be located in this world!");
+			return false;
+		}
+		
 		final int fee = Utils.calcTravelFee(player.getLocation(), location);
 		final String unit = fee == 1 ? "emerald" : "emeralds";
 
@@ -230,5 +241,10 @@ public class Utils
 		item.setAmount(item.getAmount() - amount);
 		
 		return true;
+	}
+
+	public static boolean isLocationInSameWorld(final Location from, final Location to)
+	{
+		return from.getWorld().getName().equals(to.getWorld().getName());
 	}
 }

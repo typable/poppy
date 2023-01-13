@@ -40,7 +40,7 @@ public class Main extends JavaPlugin
 	public void onEnable()
 	{
 		plugin = this;
-		config = new Config("config/minecraft-hub.yml");
+		config = new Config("config/poppy.yml");
 		
 		pluginManager = Bukkit.getPluginManager();
 
@@ -95,7 +95,7 @@ public class Main extends JavaPlugin
 				case "sethome":
 					return setHome(player, args);
 				case "setwarp":
-					return addWarppoint(player, args);
+					return setWarppoint(player, args);
 				default:
 					return false;
 			}
@@ -226,7 +226,7 @@ public class Main extends JavaPlugin
 		}
 		
 		final String name = args[0];
-		final Location location = config.getWarp(name);
+		final Location location = config.getWarp(name.toLowerCase());
 
 		if(location == null)
 		{
@@ -257,7 +257,7 @@ public class Main extends JavaPlugin
 		return true;
 	}
 
-	private boolean addWarppoint(final Player player, final String[] args)
+	private boolean setWarppoint(final Player player, final String[] args)
 	{
 		if(args.length != 1)
 		{
@@ -274,7 +274,7 @@ public class Main extends JavaPlugin
 
 		try
 		{
-			if(!config.setWarp(name, player.getLocation()))
+			if(!config.setWarp(name.toLowerCase(), player.getLocation()))
 			{
 				player.sendMessage(ChatColor.RED + "Warp point " + name + " already exists!");
 				return true;
