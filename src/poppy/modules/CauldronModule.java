@@ -6,16 +6,21 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 
 
 public class CauldronModule implements Listener
 {
 	private Plugin plugin;
+	private Integer debounceEventCount = 0;
 
 	public CauldronModule(Plugin plugin)
 	{
@@ -53,6 +58,36 @@ public class CauldronModule implements Listener
 						removeSnapshotItem(dispenser, item.getType(), 1);
 						event.setItem(new ItemStack(Material.LAVA_BUCKET));
 					}
+				}
+
+				if(debounceEventCount > 0)
+				{
+					debounceEventCount = 0;
+					return;
+				}
+
+				if(item.getType() == Material.GLASS_BOTTLE)
+				{
+					debounceEventCount++;
+					final Levelled cauldronData = (Levelled) cauldron.getBlockData();
+					final ItemStack waterBottle = new ItemStack(Material.POTION);
+					final PotionMeta potionMeta = (PotionMeta) waterBottle.getItemMeta();
+					potionMeta.setBasePotionData(new PotionData(PotionType.WATER));
+					waterBottle.setItemMeta(potionMeta);
+
+					if(cauldronData.getLevel() == 1)
+					{
+						cauldron.setType(Material.CAULDRON);
+					}
+					else
+					{
+						cauldronData.setLevel(cauldronData.getLevel() - 1);
+						System.out.println(cauldronData.getLevel());
+						cauldron.setBlockData(cauldronData);
+					}
+
+					removeSnapshotItem(dispenser, item.getType(), 1);
+					event.setItem(waterBottle);
 				}
 			}
 		}
