@@ -21,6 +21,7 @@ import poppy.modules.ChairModule;
 import poppy.modules.DoubleDoorModule;
 import poppy.modules.CommonModule;
 import poppy.modules.LeavesDecayModule;
+import poppy.modules.SpawnerModule;
 
 
 public class Main extends JavaPlugin
@@ -35,6 +36,7 @@ public class Main extends JavaPlugin
 	private AutoWorkbenchModule autoWorkbenchModule;
 	private LeavesDecayModule leavesDecayModule;
 	private CauldronModule cauldronModule;
+	private SpawnerModule spawnerModule;
 
 	@Override
 	public void onEnable()
@@ -61,6 +63,9 @@ public class Main extends JavaPlugin
 
 		cauldronModule = new CauldronModule(this);
 		pluginManager.registerEvents(cauldronModule, this);
+
+		spawnerModule = new SpawnerModule();
+		pluginManager.registerEvents(spawnerModule, this);
 	}
 
 	@Override
@@ -96,6 +101,10 @@ public class Main extends JavaPlugin
 					return setHome(player, args);
 				case "setwarp":
 					return setWarppoint(player, args);
+				case "slime":
+					return ifSlimeChunk(player, args);
+				case "r":
+					return reload(player, args);
 				default:
 					return false;
 			}
@@ -289,5 +298,26 @@ public class Main extends JavaPlugin
 
 		return true;
 	}
-	
+
+	private boolean ifSlimeChunk(final Player player, final String[] args)
+	{
+		boolean isSlimeChunk = player.getLocation().getChunk().isSlimeChunk();
+
+		if(isSlimeChunk)
+		{
+			player.sendMessage(ChatColor.YELLOW + "This is a slime chunk!");
+			return true;
+		}
+		else
+		{
+			player.sendMessage(ChatColor.RED  + "This is not a slime chunk!");
+			return true;
+		}
+	}
+
+	private boolean reload(final Player player, final String[] args)
+	{
+		player.chat("/reload confirm");
+		return true;
+	}
 }

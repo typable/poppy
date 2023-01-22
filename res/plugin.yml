@@ -17,4 +17,8 @@ commands:
     usage: /setwarp <name>
   warp:
     usage: /warp <name>
+  slime:
+    usage: /slime
+  r:
+    usage: /r
   info:
