@@ -159,6 +159,16 @@ public class CommonModule implements Listener
 				event.setCancelled(true);
 			}
 		}
+
+		if(event.getRightClicked().getType().equals(EntityType.PLAYER))
+		{
+			Player clickedPlayer = (Player) event.getRightClicked();
+
+			if(clickedPlayer.getInventory().getHelmet().getType().equals(Material.SADDLE))
+			{
+				clickedPlayer.addPassenger(player);
+			}
+		}
 	}
 	
 	@EventHandler
