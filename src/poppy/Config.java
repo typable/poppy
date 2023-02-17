@@ -12,73 +12,73 @@ import org.bukkit.Location;
 
 public class Config
 {
-    private File file;
-    private FileConfiguration configuration;
+	private File file;
+	private FileConfiguration configuration;
 
-    public Config(final String path)
-    {
-        this.file = new File(path);
-        this.configuration = YamlConfiguration.loadConfiguration(this.file);
-    }
+	public Config(final String path)
+	{
+		this.file = new File(path);
+		this.configuration = YamlConfiguration.loadConfiguration(this.file);
+	}
 
-    public void setHome(final Player player) throws IOException
-    {
-        final String path = "home." + player.getDisplayName();
-        final Location location = Utils.calcBlockCenter(player.getLocation());
-    
-        this.configuration.set(path, location);
-        this.configuration.save(this.file);
-    }
+	public void setHome(final Player player) throws IOException
+	{
+		final String path = "home." + player.getDisplayName();
+		final Location location = Utils.calcBlockCenter(player.getLocation());
+	
+		this.configuration.set(path, location);
+		this.configuration.save(this.file);
+	}
 
-    public Location getHome(final Player player)
-    {
-        final String path = "home." + player.getDisplayName();
-    
-        return this.configuration.getLocation(path);
-    }
+	public Location getHome(final Player player)
+	{
+		final String path = "home." + player.getDisplayName();
+	
+		return this.configuration.getLocation(path);
+	}
 
-    public boolean setWarp(final String name, final Location location) throws IOException
-    {
-        final String path = "warp." + name;
+	public boolean setWarp(final String name, final Location location) throws IOException
+	{
+		final String path = "warp." + name;
 
-        if(this.configuration.getLocation(path) != null)
-        {
-            return false;
-        }
-    
-        this.configuration.set(path, Utils.calcBlockCenter(location));
-        this.configuration.save(this.file);
+		if(this.configuration.getLocation(path) != null)
+		{
+			return false;
+		}
+	
+		this.configuration.set(path, Utils.calcBlockCenter(location));
+		this.configuration.save(this.file);
 
-        return true;
-    }
+		return true;
+	}
 
-    public Location getWarp(final String name)
-    {
-        final String path = "warp." + name;
-    
-        return this.configuration.getLocation(path);
-    }
+	public Location getWarp(final String name)
+	{
+		final String path = "warp." + name;
+	
+		return this.configuration.getLocation(path);
+	}
 
-    public List<String> getInfoPages()
-    {
-        final String path = "info";
-        List<String> pages = null;
+	public List<String> getInfoPages()
+	{
+		final String path = "info";
+		List<String> pages = null;
 
-        try
-        {
-            this.configuration.load(this.file);
-            pages = this.configuration.getStringList(path);
-        }
-        catch(Exception ex)
-        {
-            // ignore
-        }
+		try
+		{
+			this.configuration.load(this.file);
+			pages = this.configuration.getStringList(path);
+		}
+		catch(Exception ex)
+		{
+			// ignore
+		}
 
-        if(pages == null)
-        {
-            pages = new ArrayList<>();
-        }
+		if(pages == null)
+		{
+			pages = new ArrayList<>();
+		}
 
-        return pages;
-    }
+		return pages;
+	}
 }

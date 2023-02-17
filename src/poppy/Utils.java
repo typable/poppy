@@ -247,4 +247,10 @@ public class Utils
 	{
 		return from.getWorld().getName().equals(to.getWorld().getName());
 	}
+
+	public static boolean randomlyReduceDurability(final int level)
+	{
+		final float chance = 100.0f / (level + 1);
+		return Math.random() * 100 <= chance;
+	}
 }

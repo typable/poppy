@@ -25,23 +25,31 @@ public class SpawnerModule implements Listener
 		final Block block = event.getBlock();
 		final Player player = event.getPlayer();
 		final ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
+		final Location blockLocation = block.getLocation();
 
-		if(block.getType() == Material.SPAWNER && itemInMainHand.containsEnchantment(Enchantment.SILK_TOUCH))
+		if(itemInMainHand.containsEnchantment(Enchantment.SILK_TOUCH))
 		{
-			final CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
-			final ItemStack spawner = new ItemStack(Material.SPAWNER);
-			final ItemMeta spawnerItemMeta = spawner.getItemMeta();
-			final ArrayList<String> spawneritemLore = new ArrayList<String>();
-			final Location blockLocation = block.getLocation();
-			final BlockStateMeta spawnerblockMeta = (BlockStateMeta) spawner.getItemMeta();
+			if(block.getType() == Material.SPAWNER)
+			{
+				final CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
+				final ItemStack spawner = new ItemStack(Material.SPAWNER);
+				final ItemMeta spawnerItemMeta = spawner.getItemMeta();
+				final ArrayList<String> spawneritemLore = new ArrayList<String>();
+				final BlockStateMeta spawnerblockMeta = (BlockStateMeta) spawner.getItemMeta();
 
-			spawneritemLore.add(creatureSpawner.getSpawnedType().toString());
-			spawnerItemMeta.setLore(spawneritemLore);
-			spawner.setItemMeta(spawnerItemMeta);
-			spawnerblockMeta.setBlockState(creatureSpawner);
-			blockLocation.getWorld().dropItemNaturally(blockLocation, spawner);
-			block.setType(Material.AIR);
-			event.setExpToDrop(0);
+				spawneritemLore.add(creatureSpawner.getSpawnedType().toString());
+				spawnerItemMeta.setLore(spawneritemLore);
+				spawner.setItemMeta(spawnerItemMeta);
+				spawnerblockMeta.setBlockState(creatureSpawner);
+				blockLocation.getWorld().dropItemNaturally(blockLocation, spawner);
+				block.setType(Material.AIR);
+				event.setExpToDrop(0);
+			}
+
+			if(block.getType() == Material.BUDDING_AMETHYST)
+			{
+				blockLocation.getWorld().dropItemNaturally(blockLocation, new ItemStack(Material.BUDDING_AMETHYST));
+			}
 		}
 	}
 

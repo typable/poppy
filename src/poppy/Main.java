@@ -15,10 +15,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import poppy.modules.AutoBreakerModule;
+import poppy.modules.AutoPlacerModule;
 import poppy.modules.AutoWorkbenchModule;
 import poppy.modules.CauldronModule;
 import poppy.modules.ChairModule;
 import poppy.modules.DoubleDoorModule;
+import poppy.modules.HopperSorterModule;
 import poppy.modules.CommonModule;
 import poppy.modules.LeavesDecayModule;
 import poppy.modules.SpawnerModule;
@@ -37,6 +40,9 @@ public class Main extends JavaPlugin
 	private LeavesDecayModule leavesDecayModule;
 	private CauldronModule cauldronModule;
 	private SpawnerModule spawnerModule;
+	private HopperSorterModule hopperSorterModule;
+	private AutoPlacerModule autoPlacerModule;
+	private AutoBreakerModule autoBreakerModule;
 
 	@Override
 	public void onEnable()
@@ -66,6 +72,15 @@ public class Main extends JavaPlugin
 
 		spawnerModule = new SpawnerModule();
 		pluginManager.registerEvents(spawnerModule, this);
+
+		hopperSorterModule = new HopperSorterModule();
+		pluginManager.registerEvents(hopperSorterModule, this);
+
+		autoPlacerModule = new AutoPlacerModule(this);
+		pluginManager.registerEvents(autoPlacerModule, this);
+
+		autoBreakerModule = new AutoBreakerModule(this);
+		pluginManager.registerEvents(autoBreakerModule, this);
 	}
 
 	@Override
