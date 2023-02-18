@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -120,6 +121,8 @@ public class Main extends JavaPlugin
 					return ifSlimeChunk(player, args);
 				case "r":
 					return reload(player, args);
+				case "up":
+					return blockBelow(player, args);
 				default:
 					return false;
 			}
@@ -333,6 +336,27 @@ public class Main extends JavaPlugin
 	private boolean reload(final Player player, final String[] args)
 	{
 		player.chat("/reload confirm");
+		return true;
+	}
+
+	private boolean blockBelow(final Player player, final String[] args)
+	{
+		Location playerLocation = player.getLocation().clone();
+		Block blockBelow = playerLocation.add(0, -1, 0).getBlock();
+
+		if(!Utils.isAir(blockBelow.getType()))
+		{
+			return false;
+		}
+
+		if(!player.isOp()) 
+		{
+			player.sendMessage(Constants.Messages.NOT_ENOUGH_PERMISSION);
+			return true;
+		}
+
+		blockBelow.setType(Material.GLASS);
+
 		return true;
 	}
 }

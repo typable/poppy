@@ -39,7 +39,7 @@ public class AutoPlacerModule implements Listener
 		{
 			Dispenser dispenser = (Dispenser) blockState;
 
-			if(dispenser.getCustomName().toLowerCase().equals("placer"))
+			if(dispenser.getCustomName() != null && dispenser.getCustomName().toLowerCase().equals("placer"))
 			{
 				event.setCancelled(true);
 

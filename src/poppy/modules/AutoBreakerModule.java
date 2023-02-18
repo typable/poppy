@@ -43,7 +43,7 @@ public class AutoBreakerModule implements Listener
 		{
 			final Dispenser dispenser = (Dispenser) blockState;
 
-			if(dispenser.getCustomName().toLowerCase().equals("breaker"))
+			if(dispenser.getCustomName() != null && dispenser.getCustomName().toLowerCase().equals("breaker"))
 			{
 				event.setCancelled(true);
 
