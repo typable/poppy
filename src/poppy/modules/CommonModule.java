@@ -14,6 +14,7 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -116,6 +117,15 @@ public class CommonModule implements Listener
 	}
 
 	@EventHandler
+	public void onEntityChangeBlock(EntityChangeBlockEvent event)
+	{
+		if(event.getEntityType() == EntityType.ENDERMAN)
+		{
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event)
 	{
 		String message = ChatColor.GRAY + event.getMessage().replace("%", "%%");
@@ -162,7 +172,7 @@ public class CommonModule implements Listener
 
 		if(event.getRightClicked().getType().equals(EntityType.PLAYER))
 		{
-			Player clickedPlayer = (Player) event.getRightClicked();
+			final Player clickedPlayer = (Player) event.getRightClicked();
 
 			if(clickedPlayer.getInventory().getHelmet().getType().equals(Material.SADDLE) && player.getPassengers().size() < 0)
 			{
