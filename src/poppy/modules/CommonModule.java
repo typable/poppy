@@ -174,7 +174,7 @@ public class CommonModule implements Listener
 		{
 			final Player clickedPlayer = (Player) event.getRightClicked();
 
-			if(clickedPlayer.getInventory().getHelmet().getType().equals(Material.SADDLE) && player.getPassengers().size() < 0)
+			if(clickedPlayer.getInventory().getHelmet().getType().equals(Material.SADDLE) && player.getPassengers().size() <= 0)
 			{
 				clickedPlayer.addPassenger(player);
 			}
