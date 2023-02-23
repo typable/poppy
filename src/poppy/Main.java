@@ -26,6 +26,7 @@ import poppy.modules.HopperSorterModule;
 import poppy.modules.CommonModule;
 import poppy.modules.LeavesDecayModule;
 import poppy.modules.SpawnerModule;
+import poppy.modules.PlayerMountModule;
 
 
 public class Main extends JavaPlugin
@@ -44,6 +45,7 @@ public class Main extends JavaPlugin
 	private HopperSorterModule hopperSorterModule;
 	private AutoPlacerModule autoPlacerModule;
 	private AutoBreakerModule autoBreakerModule;
+	private PlayerMountModule playerMountModule;
 
 	@Override
 	public void onEnable()
@@ -82,6 +84,9 @@ public class Main extends JavaPlugin
 
 		autoBreakerModule = new AutoBreakerModule(this);
 		pluginManager.registerEvents(autoBreakerModule, this);
+
+		playerMountModule = new PlayerMountModule();
+		pluginManager.registerEvents(playerMountModule, this);
 	}
 
 	@Override
@@ -118,11 +123,11 @@ public class Main extends JavaPlugin
 				case "setwarp":
 					return setWarppoint(player, args);
 				case "slime":
-					return ifSlimeChunk(player, args);
+					return isSlimeChunk(player, args);
 				case "r":
-					return reload(player, args);
+					return doReload(player, args);
 				case "up":
-					return blockBelow(player, args);
+					return placeBlockBelow(player, args);
 				default:
 					return false;
 			}
@@ -135,6 +140,11 @@ public class Main extends JavaPlugin
 	{
 		final ItemStack item = player.getInventory().getItemInMainHand();
 		final ItemStack head = player.getInventory().getHelmet();
+
+		if(head != null && head.getType().equals(Material.SADDLE))
+		{
+			player.eject();
+		}
 
 		player.getInventory().setHelmet(item);
 		player.getInventory().setItemInMainHand((new ItemStack(Material.AIR)));
@@ -317,7 +327,7 @@ public class Main extends JavaPlugin
 		return true;
 	}
 
-	private boolean ifSlimeChunk(final Player player, final String[] args)
+	private boolean isSlimeChunk(final Player player, final String[] args)
 	{
 		boolean isSlimeChunk = player.getLocation().getChunk().isSlimeChunk();
 
@@ -333,13 +343,13 @@ public class Main extends JavaPlugin
 		}
 	}
 
-	private boolean reload(final Player player, final String[] args)
+	private boolean doReload(final Player player, final String[] args)
 	{
 		player.chat("/reload confirm");
 		return true;
 	}
 
-	private boolean blockBelow(final Player player, final String[] args)
+	private boolean placeBlockBelow(final Player player, final String[] args)
 	{
 		Location playerLocation = player.getLocation().clone();
 		Block blockBelow = playerLocation.add(0, -1, 0).getBlock();
