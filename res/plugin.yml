@@ -5,22 +5,38 @@ author: typable, chunksize
 api-version: 1.16
 commands:
   head:
+    usage: /head
+    description: Sets the current held item as head.
   skull:
     usage: /skull <player>
+    description: Gives a skull of the specific player.
   spawn:
     usage: /spawn
+    description: Teleports to the spawn.
   invsee:
-    usage: /invsee <name>
+    usage: /invsee <player>
+    description: Opens the inventory of a specific player.
   sethome:
+    usage: /sethome
+    description: Sets a new home point.
   home:
+    usage: /home
+    description: Teleports to the home point.
   setwarp:
     usage: /setwarp <name>
+    description: Sets a new warp point.
   warp:
     usage: /warp <name>
+    description: Teleports to the warp point of the specific name.
   slime:
     usage: /slime
+    description: Tells if the current chunk is a slime chunk.
   r:
     usage: /r
+    description: Reloads the server.
   up:
     usage: /up
+    description: Places a glass block underneath.
   info:
+    usage: /info
+    description: Opens a book with the latest features.

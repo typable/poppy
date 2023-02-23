@@ -48,14 +48,14 @@ public class AutoPlacerModule implements Listener
 					final Directional direction = (Directional) dispenser.getBlockData();
 					final Block faceBlock = dispenser.getBlock().getRelative(direction.getFacing());
 
-					if(item.getType().isBlock() && Utils.isAir(faceBlock.getType()) && !isShulkerboxContend(item))
+					if(item.getType().isBlock() && Utils.isAir(faceBlock.getType()) && !isShulkerboxContent(item))
 					{
 						faceBlock.setType(item.getType());
 						removeSnapshotItem(dispenser, item.getType(), 1);
 					}
 				}
 
-				if(isShulkerboxContend(item))
+				if(isShulkerboxContent(item))
 				{
 					event.setCancelled(false);
 				}
@@ -63,7 +63,7 @@ public class AutoPlacerModule implements Listener
 		}
 	}
 
-	public boolean isShulkerboxContend(ItemStack itemStack)
+	public boolean isShulkerboxContent(ItemStack itemStack)
 	{
 		final ItemMeta itemMeta = itemStack.getItemMeta();
 		final Set<Material> shulkerboxes = Tag.SHULKER_BOXES.getValues();
