@@ -136,7 +136,7 @@ public class AutoBreakerModule implements Listener
 		}
 	}
 
-	public static boolean isInventoryFullList(Inventory inventory, HashSet<ItemStack> items)
+	public boolean isInventoryFullList(Inventory inventory, HashSet<ItemStack> items)
 	{
 		final HashSet<ItemStack> itemsCopy = new HashSet<ItemStack>(items);
 
@@ -150,7 +150,7 @@ public class AutoBreakerModule implements Listener
 		return itemsCopy.size() != 0;
 	}
 
-	public static boolean addItemToChest(Directional direction, Dispenser dispenser, HashSet<ItemStack> items)
+	public boolean addItemToChest(Directional direction, Dispenser dispenser, HashSet<ItemStack> items)
 	{
 		Chest chest = null;
 		boolean succeeded = false;

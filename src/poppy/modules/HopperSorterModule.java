@@ -29,6 +29,12 @@ public class HopperSorterModule implements Listener
 	@EventHandler
 	public void onInventoryMoveItem(InventoryMoveItemEvent event)
 	{
+
+		if(event.getDestination().getLocation().clone() == null)
+		{
+			return;
+		}
+
 		final Location targetHopperLocation = event.getDestination().getLocation().clone();
 		final Block targetHopper = targetHopperLocation.getBlock();
 
