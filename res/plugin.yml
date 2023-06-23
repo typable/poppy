@@ -2,7 +2,7 @@ main: poppy.Main
 name: poppy
 version: 0.1.0
 author: typable, chunksize
-api-version: 1.16
+api-version: '1.20'
 commands:
   head:
     usage: /head
