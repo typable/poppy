@@ -1,7 +1,10 @@
 package poppy.modules;
 
+import java.util.Set;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
@@ -61,6 +64,15 @@ public class CommonModule implements Listener
 				}
 
 				final Material material = block.getType();
+				final Set<Material> signs = Tag.ALL_SIGNS.getValues();
+
+				for(Material sign : signs)
+				{
+					if(material == sign && !player.isSneaking())
+					{
+						event.setCancelled(true);
+					}
+				}
 
 				if(player.isSneaking()) 
 				{

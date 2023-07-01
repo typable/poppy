@@ -201,11 +201,11 @@ public class Utils
 		final int fee = Utils.calcTravelFee(player.getLocation(), location);
 		final String unit = fee == 1 ? "emerald" : "emeralds";
 
-		if(!payFee(player, Material.EMERALD, fee) && player.getGameMode() == GameMode.SURVIVAL)
-		{
-			player.sendMessage(ChatColor.RED + "Not enough emeralds to teleport! Travel fee: " + fee + " " + unit);
-			return false;
-		}
+		// if(!payFee(player, Material.EMERALD, fee) && player.getGameMode() == GameMode.SURVIVAL)
+		// {
+		// 	player.sendMessage(ChatColor.RED + "Not enough emeralds to teleport! Travel fee: " + fee + " " + unit);
+		// 	return false;
+		// }
 
 		if(player.getVehicle() != null)
 		{
