@@ -1,6 +1,7 @@
 package poppy.modules;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Dispenser;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -53,6 +55,37 @@ public class AutoBreakerModule implements Listener
 					final Block faceBlock = dispenser.getBlock().getRelative(direction.getFacing());
 
 					final HashSet<ItemStack> drops = new HashSet<ItemStack>(faceBlock.getDrops(item));
+
+					if(Tag.CROPS.isTagged(faceBlock.getType()) || Tag.MINEABLE_AXE.isTagged(faceBlock.getType()))
+					{
+						if(faceBlock.getBlockData() instanceof Ageable)
+						{
+							final Ageable ageable = (Ageable) faceBlock.getBlockData();
+
+							if(ageable.getAge() == ageable.getMaximumAge())
+							{
+								if(!addItemToChest(direction, dispenser, drops))
+								{
+									faceBlock.breakNaturally(item);
+								}
+								else
+								{
+									faceBlock.setType(Material.AIR);
+								}
+							}
+							else if(!Tag.CROPS.isTagged(faceBlock.getType()))
+							{
+								if(!addItemToChest(direction, dispenser, drops))
+								{
+									faceBlock.breakNaturally(item);
+								}
+								else
+								{
+									faceBlock.setType(Material.AIR);
+								}
+							}
+						}
+					}
 
 					if(item.getType().toString().endsWith("_PICKAXE"))
 					{
@@ -139,12 +172,15 @@ public class AutoBreakerModule implements Listener
 	public boolean isInventoryFullList(Inventory inventory, HashSet<ItemStack> items)
 	{
 		final HashSet<ItemStack> itemsCopy = new HashSet<ItemStack>(items);
+		final Iterator<ItemStack> it = itemsCopy.iterator();
 
-		for(ItemStack item : itemsCopy)
+		while(it.hasNext())
 		{
+			ItemStack item = it.next();
+
 			if(!Utils.isInventoryFull(inventory, item))
 			{
-				itemsCopy.remove(item);
+				it.remove();
 			}
 		}
 		return itemsCopy.size() != 0;

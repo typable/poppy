@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import poppy.modules.AutoBreakerModule;
 import poppy.modules.AutoPlacerModule;
 import poppy.modules.AutoWorkbenchModule;
+import poppy.modules.BlockDetectorModule;
 import poppy.modules.CauldronModule;
 import poppy.modules.ChairModule;
 import poppy.modules.DoubleDoorModule;
@@ -46,6 +47,7 @@ public class Main extends JavaPlugin
 	private AutoPlacerModule autoPlacerModule;
 	private AutoBreakerModule autoBreakerModule;
 	private PlayerMountModule playerMountModule;
+	private BlockDetectorModule blockDetectorModule;
 
 	@Override
 	public void onEnable()
@@ -87,6 +89,9 @@ public class Main extends JavaPlugin
 
 		playerMountModule = new PlayerMountModule();
 		pluginManager.registerEvents(playerMountModule, this);
+
+		blockDetectorModule = new BlockDetectorModule();
+		pluginManager.registerEvents(blockDetectorModule, this);
 	}
 
 	@Override
