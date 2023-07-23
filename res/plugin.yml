@@ -42,8 +42,8 @@ commands:
     description: Opens a book with the latest features.
   e:
     usage: /e
-    description: Opens the enderchest.
+    description: Opens the enderchest or from a player.
   enderchest:
     usage: /enderchest
-    description: Opens the enderchest.
+    description: Opens the enderchest or from a player.
 
