@@ -53,6 +53,11 @@ public class AutoPlacerModule implements Listener
 						faceBlock.setType(item.getType());
 						removeSnapshotItem(dispenser, item.getType(), 1);
 					}
+
+					if(Tag.ITEMS_HOES.isTagged(item.getType()) && faceBlock.getType() == Material.COARSE_DIRT)
+					{
+						faceBlock.setType(Material.DIRT);
+					}
 				}
 
 				if(isShulkerboxContent(item))

@@ -5,11 +5,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.Plugin;
@@ -92,6 +95,10 @@ public class Main extends JavaPlugin
 
 		blockDetectorModule = new BlockDetectorModule();
 		pluginManager.registerEvents(blockDetectorModule, this);
+
+		NamespacedKey key = new NamespacedKey(this, "leather");
+		FurnaceRecipe recipe = new FurnaceRecipe(key, new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH, 1, 200);
+		Bukkit.addRecipe(recipe);
 	}
 
 	@Override
@@ -133,6 +140,10 @@ public class Main extends JavaPlugin
 					return doReload(player, args);
 				case "up":
 					return placeBlockBelow(player, args);
+				case "e":
+					return openEnderChest(player, args);
+				case "enderchest":
+					return openEnderChest(player, args);
 				default:
 					return false;
 			}
@@ -371,6 +382,35 @@ public class Main extends JavaPlugin
 		}
 
 		blockBelow.setType(Material.GLASS);
+
+		return true;
+	}
+
+	private boolean openEnderChest(final Player player, final String[] args)
+	{
+		if(args.length != 0)
+		{
+			if(!player.isOp()) 
+			{
+				player.sendMessage(Constants.Messages.NOT_ENOUGH_PERMISSION);
+				return true;
+			}
+
+			final Player target = Bukkit.getPlayer(args[0]);
+
+			if(target == null)
+			{
+				player.sendMessage(ChatColor.RED + "Player not found!");
+				return true;
+			}
+
+			player.openInventory(target.getEnderChest());
+
+		}
+		else
+		{
+			player.openInventory(player.getEnderChest());
+		}
 
 		return true;
 	}

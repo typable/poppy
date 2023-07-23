@@ -40,3 +40,10 @@ commands:
   info:
     usage: /info
     description: Opens a book with the latest features.
+  e:
+    usage: /e
+    description: Opens the enderchest.
+  enderchest:
+    usage: /enderchest
+    description: Opens the enderchest.
+

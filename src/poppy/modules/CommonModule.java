@@ -65,14 +65,33 @@ public class CommonModule implements Listener
 
 				final Material material = block.getType();
 				final Set<Material> signs = Tag.ALL_SIGNS.getValues();
+				final String playerMainItemTypeString = player.getInventory().getItemInMainHand().getType().toString();
 
 				for(Material sign : signs)
 				{
 					if(material == sign && !player.isSneaking())
 					{
-						event.setCancelled(true);
+						if(!playerMainItemTypeString.endsWith("DYE") && !playerMainItemTypeString.endsWith("SAC"))
+						{
+							event.setCancelled(true);
+						}
 					}
 				}
+
+				// Location blockpos = block.getLocation().clone();
+
+				// double radius = 2;
+
+				// for (int i = 0; i < 20; i++) {
+
+				// 	double posX = (radius * Math.sin(i));
+				// 	double posZ = (radius * Math.cos(i));
+
+				// 	player.spawnParticle(Particle.FIREWORKS_SPARK, blockpos.getX() + posX + 0.5, blockpos.getY() + 2, blockpos.getZ() + posZ + 0.5 ,2, 0, 0, 0, 0);
+
+				// }
+
+				//player.spawnParticle(Particle.FIREWORKS_SPARK, blockpos.getX() + 0.5 , blockpos.getY() + 2, blockpos.getZ() + 0.5 ,2, 0, 0, 0, 0);
 
 				if(player.isSneaking()) 
 				{
@@ -83,7 +102,6 @@ public class CommonModule implements Listener
 
 				if(blockdata instanceof Ageable) 
 				{
-
 					final Ageable ageable = (Ageable) blockdata;
 	
 					if(Utils.isFarmable(material) && ageable.getAge() == ageable.getMaximumAge()) 
