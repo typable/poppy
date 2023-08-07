@@ -1,5 +1,5 @@
 # poppy
-A Minecraft server management plugin
+A feature-rich Minecraft plugin which enhances gaming experience
 
 ### Export as JAR file
 
