@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.Plugin;
@@ -31,6 +30,7 @@ import poppy.modules.CommonModule;
 import poppy.modules.LeavesDecayModule;
 import poppy.modules.SpawnerModule;
 import poppy.modules.PlayerMountModule;
+import poppy.modules.SpleefGameModule;
 
 
 public class Main extends JavaPlugin
@@ -51,6 +51,7 @@ public class Main extends JavaPlugin
 	private AutoBreakerModule autoBreakerModule;
 	private PlayerMountModule playerMountModule;
 	private BlockDetectorModule blockDetectorModule;
+	private SpleefGameModule spleefGameModule;
 
 	@Override
 	public void onEnable()
@@ -96,6 +97,9 @@ public class Main extends JavaPlugin
 		blockDetectorModule = new BlockDetectorModule();
 		pluginManager.registerEvents(blockDetectorModule, this);
 
+		spleefGameModule = new SpleefGameModule();
+		pluginManager.registerEvents(spleefGameModule, this);
+
 		NamespacedKey key = new NamespacedKey(this, "leather");
 		FurnaceRecipe recipe = new FurnaceRecipe(key, new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH, 1, 200);
 		Bukkit.addRecipe(recipe);
@@ -105,6 +109,7 @@ public class Main extends JavaPlugin
 	public void onDisable()
 	{
 		chairModule.onDisable();
+		spleefGameModule.onDisable();
 	}
 
 	@Override
