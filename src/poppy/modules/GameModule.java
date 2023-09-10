@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 public abstract class GameModule implements Listener
 {
@@ -153,6 +154,9 @@ class PlayerState
     private GameMode gameMode;
     private Double health;
     private Integer foodLevel;
+    private ItemStack[] contents;
+    private ItemStack[] armorContents;
+    private Float exp; 
 
     private PlayerState() { }
 
@@ -163,6 +167,8 @@ class PlayerState
         player.setGameMode(GameMode.SURVIVAL);
         player.setHealth(20.0);
         player.setFoodLevel(20);
+        player.getInventory().clear();
+        player.setExp(0);
 
         return state;
     }
@@ -173,6 +179,9 @@ class PlayerState
         state.gameMode = player.getGameMode();
         state.health = player.getHealth();
         state.foodLevel = player.getFoodLevel();
+        state.contents = player.getInventory().getContents();
+        state.armorContents = player.getInventory().getArmorContents();
+        state.exp = player.getExp();
 
         return state;
     }
@@ -184,5 +193,8 @@ class PlayerState
         player.setGameMode(this.gameMode);
         player.setHealth(this.health);
         player.setFoodLevel(this.foodLevel);
+        player.getInventory().setContents(this.contents);
+        player.getInventory().setArmorContents(this.armorContents);
+        player.setExp(this.exp);
     }
 }
