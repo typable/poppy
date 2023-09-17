@@ -6,6 +6,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -99,6 +101,11 @@ public class Main extends JavaPlugin
 		NamespacedKey key = new NamespacedKey(this, "leather");
 		FurnaceRecipe recipe = new FurnaceRecipe(key, new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH, 1, 200);
 		Bukkit.addRecipe(recipe);
+
+		new WorldCreator("creative")
+			.type(WorldType.FLAT)
+            .generateStructures(false)
+            .createWorld();
 	}
 
 	@Override
