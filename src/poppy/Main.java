@@ -12,14 +12,16 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.event.Listener;
 
 import poppy.modules.AutoBreakerModule;
 import poppy.modules.AutoPlacerModule;
@@ -35,7 +37,7 @@ import poppy.modules.SpawnerModule;
 import poppy.modules.PlayerMountModule;
 
 
-public class Main extends JavaPlugin
+public class Main extends JavaPlugin implements Listener
 {
 	private Plugin plugin;
 	private Config config;
@@ -53,6 +55,12 @@ public class Main extends JavaPlugin
 	private AutoBreakerModule autoBreakerModule;
 	private PlayerMountModule playerMountModule;
 	private BlockDetectorModule blockDetectorModule;
+
+	@Override
+	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
+	{
+		return new CustomChunkGenerator();
+	}
 
 	@Override
 	public void onEnable()
@@ -104,7 +112,7 @@ public class Main extends JavaPlugin
 
 		new WorldCreator("creative")
 			.type(WorldType.FLAT)
-            .generateStructures(false)
+            .generateStructures(true)
             .createWorld();
 	}
 
@@ -113,6 +121,8 @@ public class Main extends JavaPlugin
 	{
 		chairModule.onDisable();
 	}
+
+	@EventHandler
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
