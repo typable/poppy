@@ -6,6 +6,7 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 
 
 public class CustomGrassPopulator extends BlockPopulator
@@ -27,7 +28,7 @@ public class CustomGrassPopulator extends BlockPopulator
                 y--;
             }
 
-            if (y > 0)
+            if (y > 0 && limitedRegion.getBiome(x, y, z) != Biome.DESERT)
             {
                 limitedRegion.setType(x, y, z, Material.GRASS);
             }
@@ -47,7 +48,7 @@ public class CustomGrassPopulator extends BlockPopulator
                 y--;
             }
 
-            if (y > 0)
+            if (y > 0 && limitedRegion.getBiome(x, y, z) != Biome.DESERT)
             {
                 limitedRegion.setType(x, y, z, Material.OXEYE_DAISY);
             }
@@ -67,7 +68,7 @@ public class CustomGrassPopulator extends BlockPopulator
                 y--;
             }
 
-            if (y > 0)
+            if (y > 0 && limitedRegion.getBiome(x, y, z) != Biome.DESERT)
             {
                 limitedRegion.setType(x, y, z, Material.POPPY);
             }
@@ -87,7 +88,7 @@ public class CustomGrassPopulator extends BlockPopulator
                 y--;
             }
 
-            if (y > 0)
+            if (y > 0 && limitedRegion.getBiome(x, y, z) != Biome.DESERT)
             {
                 limitedRegion.setType(x, y, z, Material.CORNFLOWER);
             }
@@ -107,7 +108,7 @@ public class CustomGrassPopulator extends BlockPopulator
                 y--;
             }
 
-            if (y > 0)
+            if (y > 0 && limitedRegion.getBiome(x, y, z) != Biome.DESERT)
             {
                 limitedRegion.setType(x, y, z, Material.DANDELION);
             }
@@ -127,7 +128,7 @@ public class CustomGrassPopulator extends BlockPopulator
                 y--;
             }
 
-            if (y > 0)
+            if (y > 0 && limitedRegion.getBiome(x, y, z) != Biome.DESERT)
             {
                 limitedRegion.setType(x, y, z, Material.LILY_PAD);
             }
@@ -267,6 +268,29 @@ public class CustomGrassPopulator extends BlockPopulator
                 final int depth = random.nextInt((y - 1 - 1) + 1) + 1;
 
                 limitedRegion.setType(x, depth, z, Material.DIAMOND_ORE);
+            }
+
+        }
+
+        amount = random.nextInt((50 - 20) + 1) + 20;
+
+        for (int i = 0; i < amount; i++)
+        {
+            final int x = random.nextInt(16) + chunkX * 16;
+            final int z = random.nextInt(16) + chunkZ * 16;
+
+            int y = 100;
+
+            while (limitedRegion.getType(x, y - 1, z) != Material.STONE && y > 0)
+            {
+                y--;
+            }
+
+            if (y > 1)
+            {
+                final int depth = random.nextInt((y - 1 - 1) + 1) + 1;
+
+                limitedRegion.setType(x, depth, z, Material.REDSTONE_ORE);
             }
 
         }

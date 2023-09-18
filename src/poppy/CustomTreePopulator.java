@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Bukkit;
 import org.bukkit.TreeType;
+import org.bukkit.block.Biome;
 
 
 public class CustomTreePopulator extends BlockPopulator
@@ -16,7 +17,7 @@ public class CustomTreePopulator extends BlockPopulator
     @Override
     public void populate(WorldInfo worldInfo, Random random, int chunkX, int chunkZ, LimitedRegion limitedRegion)
     {
-        final int amount = random.nextInt((5 - 0) + 1) + 0;
+        final int amount = random.nextInt((6 - 0) + 1) + 0;
 
         for (int i = 0; i < amount; i++)
         {
@@ -31,8 +32,35 @@ public class CustomTreePopulator extends BlockPopulator
             }
 
             final Location location = new Location(Bukkit.getWorld(worldInfo.getUID()), x, y, z);
+            final TreeType treeType = this.getTreeType(limitedRegion.getBiome(location));
 
-            limitedRegion.generateTree(location, random, TreeType.TREE);
+            if (treeType != null)
+            {
+                limitedRegion.generateTree(location, random, treeType);
+            }
+        }
+    }
+
+    protected TreeType getTreeType(final Biome biome)
+    {
+        switch (biome)
+        {
+            case PLAINS:
+                return TreeType.TREE;
+            case BIRCH_FOREST:
+                return TreeType.BIRCH;
+            case FOREST:
+                return TreeType.REDWOOD;
+            case DESERT:
+                return null;
+            case JUNGLE:
+                return TreeType.JUNGLE;
+            case SNOWY_PLAINS:
+                return TreeType.REDWOOD;
+            case FLOWER_FOREST:
+                return TreeType.TREE;
+            default:
+                return null;
         }
     }
 }

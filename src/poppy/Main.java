@@ -1,5 +1,10 @@
 package poppy;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -120,6 +125,32 @@ public class Main extends JavaPlugin implements Listener
 	public void onDisable()
 	{
 		chairModule.onDisable();
+
+		Bukkit.unloadWorld("creative", false);
+
+		final Path dir = Paths.get("creative");
+
+        try
+		{
+	        Files
+	            .walk(dir)
+	            .sorted(Comparator.reverseOrder())
+	            .forEach(path -> {
+	                try
+					{
+	                    System.out.println("Deleting: " + path);
+	                    Files.delete(path);
+	                }
+					catch (final Exception ex)
+					{
+	                    ex.printStackTrace();
+	                }
+	            });
+        }
+		catch (final Exception ex)
+		{
+            ex.printStackTrace();
+        }
 	}
 
 	@EventHandler
